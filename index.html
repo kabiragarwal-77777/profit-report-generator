@@ -324,7 +324,7 @@ function generate() {
     label.className = 'card-section';
     label.style.fontSize = sz.secFz + 'px';
     label.style.marginTop = Math.round(sz.secMt * tblSpace) + 'px';
-    label.style.marginBottom = Math.round(sz.secMb * tblSpace) + 'px';
+    label.style.marginBottom = sz.secMb + 'px';
     label.textContent = sec.name;
     container.appendChild(label);
 
@@ -361,12 +361,13 @@ function generate() {
       const tdD = document.createElement('td'); tdD.className = 'td-duration'; tdD.textContent = row.duration;
       [tdN, tdR, tdD].forEach(td => {
         td.style.fontSize = sz.tdFz + 'px';
-        td.style.padding = Math.round(sz.tdPad * tblSpace) + 'px ' + Math.round(sz.padLR * 0.4) + 'px';
+        td.style.padding = sz.tdPad + 'px ' + Math.round(sz.padLR * 0.4) + 'px';
       });
       tr.append(tdN, tdR, tdD);
       tbody.appendChild(tr);
     }
     table.appendChild(tbody);
+    table.style.marginBottom = Math.round(sz.secMt * (tblSpace - 1)) + 'px';
     container.appendChild(table);
   }
 }
