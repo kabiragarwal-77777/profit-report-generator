@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profit Report Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=Inter:wght@300;400;600;700;800&family=Roboto:wght@300;400;700&family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
@@ -210,19 +210,43 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
         <div class="control-group">
           <label>Table Font Size</label>
           <select id="fontSize">
-            <option value="11">Small</option>
-            <option value="13" selected>Default</option>
-            <option value="15">Large</option>
-            <option value="17">Extra Large</option>
+            <option value="8">8px — Tiny</option>
+            <option value="9">9px — Extra Small</option>
+            <option value="10">10px — Small</option>
+            <option value="11">11px — Compact</option>
+            <option value="12">12px — Medium</option>
+            <option value="13" selected>13px — Default</option>
+            <option value="14">14px — Large</option>
+            <option value="15">15px — Bigger</option>
+            <option value="16">16px — Extra Large</option>
+            <option value="18">18px — Huge</option>
           </select>
         </div>
         <div class="control-group">
           <label>Title Size</label>
           <select id="titleSize">
-            <option value="36">Small</option>
-            <option value="42">Medium</option>
-            <option value="48" selected>Default</option>
-            <option value="56">Large</option>
+            <option value="28">28px — Tiny</option>
+            <option value="32">32px — Small</option>
+            <option value="36">36px — Compact</option>
+            <option value="42">42px — Medium</option>
+            <option value="48" selected>48px — Default</option>
+            <option value="54">54px — Large</option>
+            <option value="60">60px — Extra Large</option>
+          </select>
+        </div>
+        <div class="control-group full">
+          <label>Font Family</label>
+          <select id="fontFamily">
+            <option value="'Segoe UI', system-ui, sans-serif" selected>Segoe UI (Default)</option>
+            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Arial', sans-serif">Arial</option>
+            <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+            <option value="'Roboto', sans-serif">Roboto</option>
+            <option value="'Poppins', sans-serif">Poppins</option>
+            <option value="'Open Sans', sans-serif">Open Sans</option>
+            <option value="'Lato', sans-serif">Lato</option>
+            <option value="'Montserrat', sans-serif">Montserrat</option>
+            <option value="'Nunito', sans-serif">Nunito</option>
           </select>
         </div>
         <div class="control-group">
@@ -308,9 +332,11 @@ function generate() {
   let   tGap     = parseInt(document.getElementById('tableGap').value);
   const sebi     = document.getElementById('sebiReg').value;
   const disc     = document.getElementById('disclaimer').value;
+  const fontFam  = document.getElementById('fontFamily').value;
 
   const card = document.getElementById('card');
   card.style.width = cardW + 'px';
+  card.style.fontFamily = fontFam;
 
   // Count total trades
   const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
@@ -415,7 +441,7 @@ document.getElementById('cardWidth').addEventListener('input', function () {
   document.getElementById('cardWidthVal').textContent = this.value + 'px';
   generate();
 });
-['fontSize','titleSize','rowPadding','tableGap','sebiReg'].forEach(id => {
+['fontSize','titleSize','rowPadding','tableGap','sebiReg','fontFamily'].forEach(id => {
   document.getElementById(id).addEventListener('change', generate);
 });
 document.getElementById('inputText').addEventListener('input', generate);
