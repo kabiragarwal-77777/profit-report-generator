@@ -187,13 +187,16 @@ function parseInput(text) {
   for (const raw of text.split('\n')) {
     const line = raw.trim();
     if (!line) continue;
-    if (/^(Equity|Futures|Options|Commodity)\s*:/i.test(line)) {
-      cur = { name: line.replace(/\s*:\s*$/, '').toUpperCase(), rows: [] };
+    if (/^(Equity|Futures?|Options?|Commodity)\s*:/i.test(line)) {
+      let secName = line.replace(/\s*:\s*$/, '').toUpperCase();
+      if (secName === 'FUTURE') secName = 'FUTURES';
+      if (secName === 'OPTION') secName = 'OPTIONS';
+      cur = { name: secName, rows: [] };
       sections.push(cur);
       continue;
     }
     if (!cur) continue;
-    const m = line.match(/^(.+?):\s*(.+?)\s+in\s+(.+)$/i);
+    const m = line.match(/^(.+?):\s*(.+?)\s+(?:in|on)\s+(.+)$/i);
     if (m) cur.rows.push({ name: m[1].trim(), returns: m[2].trim(), duration: m[3].trim() });
   }
   return sections;
