@@ -10,6 +10,7 @@
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
   .app { display: flex; height: 100vh; }
 
+  /* LEFT PANEL */
   .panel { width: 420px; min-width: 380px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; }
   .panel-header { padding: 20px 24px 12px; border-bottom: 1px solid #2a2d3a; }
   .panel-header h1 { font-size: 18px; color: #4aeabc; font-weight: 700; }
@@ -37,110 +38,132 @@
   input[type="range"] { width: 100%; accent-color: #4aeabc; }
   .range-val { font-size: 11px; color: #4aeabc; text-align: right; margin-top: 2px; }
 
+  /* RIGHT — PREVIEW */
   .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 30px; background: #0b0d12; }
 
-  /* ════════════════════════════════════
-     THE CARD
-     ════════════════════════════════════ */
+  /* ════════ THE CARD ════════ */
   .card {
     width: 600px;
-    background: url('bg.jpg') center top / 100% 100% no-repeat;
-    padding: 24px 30px 20px;
+    background: url('bg.jpg') center / 100% 100% no-repeat;
     font-family: 'Segoe UI', system-ui, sans-serif;
     color: #fff;
     position: relative;
     overflow: hidden;
-    min-height: 400px;
   }
 
-  /* SEBI — top right */
+  /* Dark overlays to hide baked-in SEBI (top) and disclaimer (bottom) from bg image */
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6%;
+    background: linear-gradient(to bottom, #070a0e 40%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 6%;
+    background: linear-gradient(to top, #081210 40%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Inner wrapper with padding — all content sits above the overlays */
+  .card-inner {
+    position: relative;
+    z-index: 2;
+    padding: 24px 30px 18px;
+  }
+
+  /* SEBI */
   .card-sebi {
-    position: relative; z-index: 1;
     text-align: right;
     font-size: 13px;
     font-weight: 700;
     color: #d4c97a;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
-  /* TITLE — left aligned, serif italic */
+  /* TITLE */
   .card-title {
-    position: relative; z-index: 1;
     text-align: left;
-    margin: 4px 0 20px 4px;
+    margin: 4px 0 18px 2px;
     line-height: 1.05;
     white-space: nowrap;
   }
-  .card-title .green {
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  .card-title .t-green {
+    font-family: 'Playfair Display', Georgia, serif;
     font-style: italic;
     font-weight: 800;
     color: #4aeabc;
   }
-  .card-title .white {
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  .card-title .t-white {
+    font-family: 'Playfair Display', Georgia, serif;
     font-style: italic;
     font-weight: 400;
     color: #ffffffdd;
   }
 
-  /* SECTION HEADER */
+  /* SECTION LABEL */
   .card-section {
-    position: relative; z-index: 1;
     text-align: center;
-    font-size: 12px;
     font-weight: 600;
     letter-spacing: 2.5px;
     color: rgba(255,255,255,.7);
-    margin: 16px 0 6px;
     text-transform: uppercase;
   }
 
-  /* TABLE */
+  /* TABLE — fixed column widths for alignment */
   .card-table {
-    position: relative; z-index: 1;
     width: 100%;
     border-collapse: collapse;
-    border-left: 1px solid rgba(255,255,255,.35);
-    border-right: 1px solid rgba(255,255,255,.35);
+    table-layout: fixed;
   }
+  .card-table col.c-name    { width: 35%; }
+  .card-table col.c-returns { width: 35%; }
+  .card-table col.c-dur     { width: 30%; }
+
   .card-table thead th {
-    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1.2px;
     color: #d4c97a;
     text-transform: uppercase;
     text-align: center;
-    padding: 9px 10px;
-    border-top: 1px solid rgba(255,255,255,.45);
-    border-bottom: 1px solid rgba(255,255,255,.45);
-    border-right: 1px solid rgba(255,255,255,.25);
+    border-top: 1px solid rgba(255,255,255,.4);
+    border-bottom: 1px solid rgba(255,255,255,.4);
+    border-right: 1px solid rgba(255,255,255,.2);
   }
   .card-table thead th:last-child { border-right: none; }
+
   .card-table tbody td {
     text-align: center;
-    padding: 7px 10px;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255,255,255,.3);
-    border-right: 1px solid rgba(255,255,255,.25);
+    border-bottom: 1px solid rgba(255,255,255,.22);
+    border-right: 1px solid rgba(255,255,255,.2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .card-table tbody td:last-child { border-right: none; }
   .card-table tbody tr:last-child td {
-    border-bottom: 1px solid rgba(255,255,255,.45);
+    border-bottom: 1px solid rgba(255,255,255,.4);
   }
+
+  /* Outer table border (left + right) */
+  .card-table { border-left: 1px solid rgba(255,255,255,.4); border-right: 1px solid rgba(255,255,255,.4); }
+
   .td-name     { color: rgba(255,255,255,.8); }
   .td-returns  { color: #4aeabc; font-weight: 700; }
   .td-duration { color: rgba(255,255,255,.8); }
 
   /* DISCLAIMER */
   .card-disclaimer {
-    position: relative; z-index: 1;
-    margin-top: 20px;
-    font-size: 8px;
-    color: rgba(200,195,160,.5);
+    font-size: 7.5px;
+    color: rgba(200,195,160,.45);
     line-height: 1.5;
     text-align: center;
-    padding: 0 6px;
+    padding: 0 4px;
+    margin-top: 16px;
   }
 
   @media (max-width: 900px) {
@@ -214,9 +237,9 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
         <div class="control-group">
           <label>Section Spacing</label>
           <select id="tableGap">
-            <option value="10">Tight</option>
-            <option value="16" selected>Normal</option>
-            <option value="26">Wide</option>
+            <option value="8">Tight</option>
+            <option value="14" selected>Normal</option>
+            <option value="24">Wide</option>
           </select>
         </div>
         <div class="control-group full">
@@ -238,10 +261,12 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
 
   <div class="preview-area">
     <div class="card" id="card">
-      <div class="card-sebi" id="sebiLine">SEBI Reg. : INH000013776</div>
-      <div class="card-title" id="titleBlock"></div>
-      <div id="tablesContainer"></div>
-      <div class="card-disclaimer" id="disclaimerDisplay"></div>
+      <div class="card-inner" id="cardInner">
+        <div class="card-sebi" id="sebiLine">SEBI Reg. : INH000013776</div>
+        <div class="card-title" id="titleBlock"></div>
+        <div id="tablesContainer"></div>
+        <div class="card-disclaimer" id="disclaimerDisplay"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -276,25 +301,38 @@ const COL_HEADERS = {
 function generate() {
   const text     = document.getElementById('inputText').value;
   const sections = parseInput(text);
-  const cardW    = document.getElementById('cardWidth').value;
-  const fSize    = document.getElementById('fontSize').value;
-  const tSize    = document.getElementById('titleSize').value;
-  const rPad     = document.getElementById('rowPadding').value;
-  const tGap     = document.getElementById('tableGap').value;
+  const cardW    = parseInt(document.getElementById('cardWidth').value);
+  let   fSize    = parseInt(document.getElementById('fontSize').value);
+  let   tSize    = parseInt(document.getElementById('titleSize').value);
+  let   rPad     = parseInt(document.getElementById('rowPadding').value);
+  let   tGap     = parseInt(document.getElementById('tableGap').value);
   const sebi     = document.getElementById('sebiReg').value;
   const disc     = document.getElementById('disclaimer').value;
 
-  document.getElementById('card').style.width = cardW + 'px';
+  const card = document.getElementById('card');
+  card.style.width = cardW + 'px';
+
+  // Count total trades
+  const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
+
+  // Auto-scale: if many trades, shrink sizes proportionally
+  // Base: 12 trades fits comfortably. Scale down for more.
+  const scale = total <= 12 ? 1 : Math.max(0.55, 12 / total);
+  if (scale < 1) {
+    fSize  = Math.max(9, Math.round(fSize * scale));
+    tSize  = Math.max(24, Math.round(tSize * scale));
+    rPad   = Math.max(2, Math.round(rPad * scale));
+    tGap   = Math.max(4, Math.round(tGap * scale));
+  }
 
   // SEBI
   document.getElementById('sebiLine').textContent = 'SEBI Reg. : ' + sebi;
 
-  // Title — auto-count total trades
-  const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
+  // Title
   const titleBlock = document.getElementById('titleBlock');
   titleBlock.innerHTML =
-    '<span class="green" style="font-size:' + tSize + 'px">' + total + ' Profits </span>' +
-    '<span class="white" style="font-size:' + tSize + 'px">Booked Today</span>';
+    '<span class="t-green" style="font-size:' + tSize + 'px">' + total + ' Profits </span>' +
+    '<span class="t-white" style="font-size:' + tSize + 'px">Booked Today</span>';
 
   // Disclaimer
   document.getElementById('disclaimerDisplay').textContent = disc;
@@ -303,49 +341,55 @@ function generate() {
   const container = document.getElementById('tablesContainer');
   container.innerHTML = '';
 
+  const hFontSize = Math.max(8, fSize - 2);
+
   for (const sec of sections) {
+    // Section label
     const label = document.createElement('div');
     label.className = 'card-section';
     label.style.marginTop = tGap + 'px';
+    label.style.marginBottom = Math.max(3, Math.round(tGap * 0.4)) + 'px';
+    label.style.fontSize = Math.max(9, fSize - 1) + 'px';
     label.textContent = sec.name;
     container.appendChild(label);
 
+    // Table
     const headers = COL_HEADERS[sec.name] || COL_HEADERS['EQUITY'];
     const table = document.createElement('table');
     table.className = 'card-table';
 
-    // thead
+    // Colgroup for fixed widths
+    const colgroup = document.createElement('colgroup');
+    ['c-name','c-returns','c-dur'].forEach(cls => {
+      const col = document.createElement('col');
+      col.className = cls;
+      colgroup.appendChild(col);
+    });
+    table.appendChild(colgroup);
+
+    // Thead
     const thead = document.createElement('thead');
     const htr = document.createElement('tr');
     headers.forEach(h => {
       const th = document.createElement('th');
       th.textContent = h;
-      th.style.fontSize = (parseInt(fSize) - 2) + 'px';
+      th.style.fontSize = hFontSize + 'px';
+      th.style.padding = Math.max(3, rPad) + 'px 8px';
       htr.appendChild(th);
     });
     thead.appendChild(htr);
     table.appendChild(thead);
 
-    // tbody
+    // Tbody
     const tbody = document.createElement('tbody');
     for (const row of sec.rows) {
       const tr = document.createElement('tr');
-
-      const tdN = document.createElement('td');
-      tdN.className = 'td-name';
-      tdN.textContent = row.name;
-
-      const tdR = document.createElement('td');
-      tdR.className = 'td-returns';
-      tdR.textContent = row.returns;
-
-      const tdD = document.createElement('td');
-      tdD.className = 'td-duration';
-      tdD.textContent = row.duration;
-
+      const tdN = document.createElement('td'); tdN.className = 'td-name';     tdN.textContent = row.name;
+      const tdR = document.createElement('td'); tdR.className = 'td-returns';  tdR.textContent = row.returns;
+      const tdD = document.createElement('td'); tdD.className = 'td-duration'; tdD.textContent = row.duration;
       [tdN, tdR, tdD].forEach(td => {
         td.style.fontSize = fSize + 'px';
-        td.style.padding = rPad + 'px 10px';
+        td.style.padding = rPad + 'px 8px';
       });
       tr.append(tdN, tdR, tdD);
       tbody.appendChild(tr);
@@ -377,24 +421,8 @@ document.getElementById('cardWidth').addEventListener('input', function () {
 document.getElementById('inputText').addEventListener('input', generate);
 document.getElementById('disclaimer').addEventListener('input', generate);
 
-// Crop baked-in SEBI & disclaimer from background image, then generate
-window.addEventListener('DOMContentLoaded', () => {
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const cropTop = Math.round(img.height * 0.04);   // remove top 4% (SEBI text)
-    const cropBot = Math.round(img.height * 0.045);   // remove bottom 4.5% (disclaimer)
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height - cropTop - cropBot;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, cropTop, img.width, canvas.height, 0, 0, canvas.width, canvas.height);
-    document.getElementById('card').style.backgroundImage = 'url(' + canvas.toDataURL('image/jpeg', 0.95) + ')';
-    generate();
-  };
-  img.onerror = () => generate(); // fallback
-  img.src = 'bg.jpg';
-});
+// Generate on load
+window.addEventListener('DOMContentLoaded', generate);
 </script>
 </body>
 </html>
