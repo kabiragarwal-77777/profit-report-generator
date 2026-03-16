@@ -90,9 +90,9 @@
   /* SECTION LABEL */
   .card-section {
     text-align: center;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 2.5px;
-    color: rgba(255,255,255,.7);
+    color: rgba(255,255,255,.85);
     text-transform: uppercase;
   }
 
@@ -189,14 +189,21 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
           <input type="range" id="cardWidth" min="400" max="1000" value="600">
           <div class="range-val" id="cardWidthVal">600px</div>
         </div>
+        <div class="control-group full">
+          <label>Overall Font Scale</label>
+          <input type="range" id="overallScale" min="50" max="150" value="100" step="5">
+          <div class="range-val" id="overallScaleVal">100%</div>
+        </div>
         <div class="control-group">
           <label>Table Font Size</label>
           <select id="fontSize">
-            <option value="8">8px — Tiny</option>
-            <option value="9">9px — Extra Small</option>
-            <option value="10">10px — Small</option>
-            <option value="11">11px — Compact</option>
-            <option value="12">12px — Medium</option>
+            <option value="6">6px — Micro</option>
+            <option value="7">7px — Tiny</option>
+            <option value="8">8px — Extra Small</option>
+            <option value="9">9px — Small</option>
+            <option value="10">10px — Compact</option>
+            <option value="11">11px — Medium</option>
+            <option value="12">12px — Regular</option>
             <option value="13" selected>13px — Default</option>
             <option value="14">14px — Large</option>
             <option value="15">15px — Bigger</option>
@@ -315,10 +322,17 @@ function generate() {
   const sebi     = document.getElementById('sebiReg').value;
   const disc     = document.getElementById('disclaimer').value;
   const fontFam  = document.getElementById('fontFamily').value;
+  const oScale   = parseInt(document.getElementById('overallScale').value) / 100;
 
   const card = document.getElementById('card');
   card.style.width = cardW + 'px';
   card.style.fontFamily = fontFam;
+
+  // Apply overall scale to all sizes
+  fSize = Math.round(fSize * oScale);
+  tSize = Math.round(tSize * oScale);
+  rPad  = Math.round(rPad * oScale);
+  tGap  = Math.round(tGap * oScale);
 
   // Count total trades
   const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
@@ -335,6 +349,10 @@ function generate() {
 
   // SEBI
   document.getElementById('sebiLine').textContent = 'SEBI Reg. : ' + sebi;
+  document.getElementById('sebiLine').style.fontSize = Math.round(13 * oScale) + 'px';
+
+  // Disclaimer font scale
+  document.getElementById('disclaimerDisplay').style.fontSize = Math.max(5, Math.round(7.5 * oScale)) + 'px';
 
   // Title
   const titleBlock = document.getElementById('titleBlock');
@@ -421,6 +439,10 @@ function download() {
 // Live updates
 document.getElementById('cardWidth').addEventListener('input', function () {
   document.getElementById('cardWidthVal').textContent = this.value + 'px';
+  generate();
+});
+document.getElementById('overallScale').addEventListener('input', function () {
+  document.getElementById('overallScaleVal').textContent = this.value + '%';
   generate();
 });
 ['fontSize','titleSize','rowPadding','tableGap','sebiReg','fontFamily'].forEach(id => {
