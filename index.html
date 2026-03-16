@@ -51,28 +51,10 @@
     overflow: hidden;
   }
 
-  /* Dark overlays to hide baked-in SEBI (top) and disclaimer (bottom) from bg image */
-  .card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 6%;
-    background: linear-gradient(to bottom, #070a0e 40%, transparent 100%);
-    z-index: 1;
-    pointer-events: none;
-  }
-  .card::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 6%;
-    background: linear-gradient(to top, #081210 40%, transparent 100%);
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  /* Inner wrapper with padding — all content sits above the overlays */
+  /* Inner wrapper with padding */
   .card-inner {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     padding: 24px 30px 18px;
   }
 
@@ -93,15 +75,15 @@
     white-space: nowrap;
   }
   .card-title .t-green {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     font-style: italic;
     font-weight: 800;
     color: #4aeabc;
   }
   .card-title .t-white {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 300;
     color: #ffffffdd;
   }
 
