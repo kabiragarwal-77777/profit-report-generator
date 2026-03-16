@@ -364,8 +364,8 @@ function download() {
     scale: 2, backgroundColor: null, useCORS: true
   }).then(canvas => {
     const a = document.createElement('a');
-    a.download = 'profit-report.png';
-    a.href = canvas.toDataURL('image/png');
+    a.download = 'profit-report.jpg';
+    a.href = canvas.toDataURL('image/jpeg', 0.95);
     a.click();
   });
 }
