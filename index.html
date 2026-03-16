@@ -377,8 +377,24 @@ document.getElementById('cardWidth').addEventListener('input', function () {
 document.getElementById('inputText').addEventListener('input', generate);
 document.getElementById('disclaimer').addEventListener('input', generate);
 
-// Generate immediately on load with the sample data
-window.addEventListener('DOMContentLoaded', generate);
+// Crop baked-in SEBI & disclaimer from background image, then generate
+window.addEventListener('DOMContentLoaded', () => {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const cropTop = Math.round(img.height * 0.04);   // remove top 4% (SEBI text)
+    const cropBot = Math.round(img.height * 0.045);   // remove bottom 4.5% (disclaimer)
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height - cropTop - cropBot;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, cropTop, img.width, canvas.height, 0, 0, canvas.width, canvas.height);
+    document.getElementById('card').style.backgroundImage = 'url(' + canvas.toDataURL('image/jpeg', 0.95) + ')';
+    generate();
+  };
+  img.onerror = () => generate(); // fallback
+  img.src = 'bg.jpg';
+});
 </script>
 </body>
 </html>
