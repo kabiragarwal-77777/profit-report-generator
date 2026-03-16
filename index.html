@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profit Report Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
   .app { display: flex; height: 100vh; }
 
-  /* LEFT PANEL */
-  .panel { width: 420px; min-width: 380px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; overflow-y: auto; }
+  .panel { width: 420px; min-width: 380px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; }
   .panel-header { padding: 20px 24px 12px; border-bottom: 1px solid #2a2d3a; }
   .panel-header h1 { font-size: 18px; color: #4aeabc; font-weight: 700; }
   .panel-header p { font-size: 12px; color: #888; margin-top: 4px; }
@@ -24,7 +23,7 @@
   .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
   .control-group { display: flex; flex-direction: column; }
   .control-group.full { grid-column: 1 / -1; }
-  input[type="number"], input[type="text"], select { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 6px; color: #e0e0e0; font-size: 13px; padding: 8px 10px; outline: none; }
+  input[type="text"], select { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 6px; color: #e0e0e0; font-size: 13px; padding: 8px 10px; outline: none; }
   input:focus, select:focus { border-color: #4aeabc; }
 
   .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
@@ -38,128 +37,103 @@
   input[type="range"] { width: 100%; accent-color: #4aeabc; }
   .range-val { font-size: 11px; color: #4aeabc; text-align: right; margin-top: 2px; }
 
-  /* RIGHT — PREVIEW */
   .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 30px; background: #0b0d12; }
 
-  /* ═══════════════════════════════════
-     CARD — matches the template exactly
-     ═══════════════════════════════════ */
+  /* ════════════════════════════════════
+     THE CARD
+     ════════════════════════════════════ */
   .card {
     width: 600px;
-    min-height: 400px;
-    background: linear-gradient(135deg, #0a1f1c 0%, #0b161a 25%, #090e13 50%, #080c10 100%);
+    background: url('bg.jpg') center/cover no-repeat;
     padding: 24px 30px 20px;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     color: #fff;
     position: relative;
     overflow: hidden;
   }
-  /* Left teal glow */
-  .card::before {
-    content: '';
-    position: absolute;
-    left: -100px; top: 0; width: 250px; height: 100%;
-    background: radial-gradient(ellipse at center, rgba(40,160,120,.13) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  /* Bottom-left glow */
-  .card::after {
-    content: '';
-    position: absolute;
-    left: -50px; bottom: -80px; width: 250px; height: 250px;
-    background: radial-gradient(ellipse, rgba(40,160,120,.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
 
-  /* SEBI — top right, bold */
-  .sebi {
+  /* SEBI — top right */
+  .card-sebi {
+    position: relative; z-index: 1;
     text-align: right;
-    font-size: 11.5px;
-    color: #fff;
+    font-size: 13px;
     font-weight: 700;
-    margin-bottom: 6px;
-    position: relative; z-index: 1;
-    letter-spacing: 0.3px;
+    color: #d4c97a;
+    margin-bottom: 8px;
   }
 
-  /* TITLE */
-  .title {
+  /* TITLE — left aligned, serif italic */
+  .card-title {
+    position: relative; z-index: 1;
     text-align: left;
-    margin: 8px 0 22px 8px;
-    position: relative; z-index: 1;
-    line-height: 1.1;
+    margin: 4px 0 20px 4px;
+    line-height: 1.05;
+    white-space: nowrap;
   }
-  .title-green {
-    color: #4aeabc;
-    font-family: 'Playfair Display', Georgia, serif;
+  .card-title .green {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-style: italic;
     font-weight: 800;
-    font-style: italic;
-    font-size: 48px;
+    color: #4aeabc;
   }
-  .title-white {
-    color: #ffffffdd;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 400;
+  .card-title .white {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
     font-style: italic;
-    font-size: 48px;
+    font-weight: 400;
+    color: #ffffffdd;
   }
 
-  /* SECTION LABEL */
-  .section-label {
+  /* SECTION HEADER */
+  .card-section {
+    position: relative; z-index: 1;
     text-align: center;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 2.5px;
-    color: #ffffffbb;
-    margin: 18px 0 6px;
+    color: rgba(255,255,255,.7);
+    margin: 16px 0 6px;
     text-transform: uppercase;
-    position: relative; z-index: 1;
   }
 
   /* TABLE */
-  .report-table {
+  .card-table {
+    position: relative; z-index: 1;
     width: 100%;
     border-collapse: collapse;
-    position: relative; z-index: 1;
   }
-
-  /* Header row — top and bottom horizontal lines */
-  .report-table thead th {
+  .card-table thead th {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1.2px;
-    color: #ffffffcc;
-    padding: 8px 12px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,.85);
     text-transform: uppercase;
     text-align: center;
-    border-top: 1px solid #ffffff33;
-    border-bottom: 1px solid #ffffff33;
+    padding: 8px 10px;
+    border-top: 1px solid rgba(255,255,255,.25);
+    border-bottom: 1px solid rgba(255,255,255,.25);
   }
-
-  /* Data rows — subtle bottom line only */
-  .report-table tbody td {
-    padding: 7px 12px;
-    font-size: 13px;
+  .card-table tbody td {
     text-align: center;
-    border-bottom: 1px solid #ffffff15;
+    padding: 7px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,.15);
   }
-  .report-table tbody tr:last-child td {
-    border-bottom: 1px solid #ffffff28;
+  .card-table tbody tr:last-child td {
+    border-bottom: 1px solid rgba(255,255,255,.25);
   }
-
-  .col-name    { color: #ddd; font-weight: 400; }
-  .col-returns { color: #4aeabc; font-weight: 700; }
-  .col-duration{ color: #ddd; font-weight: 400; }
+  .td-name     { color: rgba(255,255,255,.75); }
+  .td-returns  { color: #4aeabc; font-weight: 700; }
+  .td-duration { color: rgba(255,255,255,.75); }
 
   /* DISCLAIMER */
-  .disclaimer {
-    margin-top: 24px;
-    font-size: 7.5px;
-    color: #ffffff40;
+  .card-disclaimer {
+    position: relative; z-index: 1;
+    margin-top: 20px;
+    font-size: 8px;
+    color: rgba(200,195,160,.5);
     line-height: 1.5;
     text-align: center;
-    position: relative; z-index: 1;
-    padding: 0 8px;
+    padding: 0 6px;
   }
 
   @media (max-width: 900px) {
@@ -179,18 +153,23 @@
     </div>
     <div class="panel-body">
       <label>Trade Data (paste here)</label>
-      <textarea id="inputText" rows="14" placeholder="Equity:
-APOLLOHOSP: 7.45% in 60 days
-ZFCVINDIA: 5.72% in 39 days
+      <textarea id="inputText" rows="14">Equity:
+OIL: 3.33% in 5 Days
+TATAINVEST: 2.02% in 1 Hour
 
 Futures:
-SONACOMS26FEBFUT: ₹7,411.25 in 2 days
+BEL26MARFUT: ₹8,193 in Same Day
+NBCC26MARFUT: ₹7,605 in 1 Day
+AUROPHARMA26MARFUT: ₹7,425 in Same Day
+BEL26MARFUT: ₹7,410 in 1 Day
+AMBER26MARFUT: ₹7,200 in Same Day
 
 Options:
-NESTLEIND: 8.12% in 1 day
-
-Commodity:
-CRUDEOIL26FEBFUT: 2.04% in 1 day"></textarea>
+SENSEX: 32.33% in 8 Mins
+BDL: 6.02% in 1 Day
+BDL: 5.94% in 46 Mins
+CANBK: 4.39% in 22 Mins
+NIFTY 50: 2.93% in 57 Mins</textarea>
 
       <div class="controls">
         <div class="control-group full">
@@ -229,8 +208,8 @@ CRUDEOIL26FEBFUT: 2.04% in 1 day"></textarea>
           <label>Section Spacing</label>
           <select id="tableGap">
             <option value="10">Tight</option>
-            <option value="18" selected>Normal</option>
-            <option value="28">Wide</option>
+            <option value="16" selected>Normal</option>
+            <option value="26">Wide</option>
           </select>
         </div>
         <div class="control-group full">
@@ -252,14 +231,10 @@ CRUDEOIL26FEBFUT: 2.04% in 1 day"></textarea>
 
   <div class="preview-area">
     <div class="card" id="card">
-      <div class="sebi" id="sebiLine">SEBI Reg. : INH000013776</div>
-      <div class="title" id="titleBlock">
-        <span class="title-green" id="profitCount">0</span>
-        <span class="title-green"> Profits </span>
-        <span class="title-white">Booked Today</span>
-      </div>
+      <div class="card-sebi" id="sebiLine">SEBI Reg. : INH000013776</div>
+      <div class="card-title" id="titleBlock"></div>
       <div id="tablesContainer"></div>
-      <div class="disclaimer" id="disclaimerDisplay"></div>
+      <div class="card-disclaimer" id="disclaimerDisplay"></div>
     </div>
   </div>
 </div>
@@ -302,20 +277,17 @@ function generate() {
   const sebi     = document.getElementById('sebiReg').value;
   const disc     = document.getElementById('disclaimer').value;
 
-  const card = document.getElementById('card');
-  card.style.width = cardW + 'px';
+  document.getElementById('card').style.width = cardW + 'px';
 
   // SEBI
   document.getElementById('sebiLine').textContent = 'SEBI Reg. : ' + sebi;
 
-  // Title — auto-count
+  // Title — auto-count total trades
   const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
-  document.getElementById('profitCount').textContent = total;
-
-  // Title size
-  document.querySelectorAll('.title-green, .title-white').forEach(el => {
-    el.style.fontSize = tSize + 'px';
-  });
+  const titleBlock = document.getElementById('titleBlock');
+  titleBlock.innerHTML =
+    '<span class="green" style="font-size:' + tSize + 'px">' + total + ' Profits </span>' +
+    '<span class="white" style="font-size:' + tSize + 'px">Booked Today</span>';
 
   // Disclaimer
   document.getElementById('disclaimerDisplay').textContent = disc;
@@ -326,35 +298,47 @@ function generate() {
 
   for (const sec of sections) {
     const label = document.createElement('div');
-    label.className = 'section-label';
+    label.className = 'card-section';
     label.style.marginTop = tGap + 'px';
     label.textContent = sec.name;
     container.appendChild(label);
 
     const headers = COL_HEADERS[sec.name] || COL_HEADERS['EQUITY'];
     const table = document.createElement('table');
-    table.className = 'report-table';
+    table.className = 'card-table';
 
+    // thead
     const thead = document.createElement('thead');
-    const headRow = document.createElement('tr');
+    const htr = document.createElement('tr');
     headers.forEach(h => {
       const th = document.createElement('th');
       th.textContent = h;
       th.style.fontSize = (parseInt(fSize) - 2) + 'px';
-      headRow.appendChild(th);
+      htr.appendChild(th);
     });
-    thead.appendChild(headRow);
+    thead.appendChild(htr);
     table.appendChild(thead);
 
+    // tbody
     const tbody = document.createElement('tbody');
     for (const row of sec.rows) {
       const tr = document.createElement('tr');
-      const tdN = document.createElement('td'); tdN.className = 'col-name';     tdN.textContent = row.name;
-      const tdR = document.createElement('td'); tdR.className = 'col-returns';  tdR.textContent = row.returns;
-      const tdD = document.createElement('td'); tdD.className = 'col-duration'; tdD.textContent = row.duration;
+
+      const tdN = document.createElement('td');
+      tdN.className = 'td-name';
+      tdN.textContent = row.name;
+
+      const tdR = document.createElement('td');
+      tdR.className = 'td-returns';
+      tdR.textContent = row.returns;
+
+      const tdD = document.createElement('td');
+      tdD.className = 'td-duration';
+      tdD.textContent = row.duration;
+
       [tdN, tdR, tdD].forEach(td => {
         td.style.fontSize = fSize + 'px';
-        td.style.padding = rPad + 'px 12px';
+        td.style.padding = rPad + 'px 10px';
       });
       tr.append(tdN, tdR, tdD);
       tbody.appendChild(tr);
@@ -365,8 +349,9 @@ function generate() {
 }
 
 function download() {
-  const card = document.getElementById('card');
-  html2canvas(card, { scale: 2, backgroundColor: null, useCORS: true }).then(canvas => {
+  html2canvas(document.getElementById('card'), {
+    scale: 2, backgroundColor: null, useCORS: true
+  }).then(canvas => {
     const a = document.createElement('a');
     a.download = 'profit-report.png';
     a.href = canvas.toDataURL('image/png');
@@ -385,9 +370,8 @@ document.getElementById('cardWidth').addEventListener('input', function () {
 document.getElementById('inputText').addEventListener('input', generate);
 document.getElementById('disclaimer').addEventListener('input', generate);
 
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('disclaimerDisplay').textContent = document.getElementById('disclaimer').value;
-});
+// Generate immediately on load with the sample data
+window.addEventListener('DOMContentLoaded', generate);
 </script>
 </body>
 </html>
