@@ -187,8 +187,8 @@ function parseInput(text) {
   for (const raw of text.split('\n')) {
     const line = raw.trim();
     if (!line) continue;
-    if (/^(Equity|Futures?|Options?|Commodity)\s*:/i.test(line)) {
-      let secName = line.replace(/\s*:\s*$/, '').toUpperCase();
+    if (/^(Equity|Futures?|Options?|Commodity)\s*:?\s*$/i.test(line)) {
+      let secName = line.replace(/\s*:?\s*$/, '').toUpperCase();
       if (secName === 'FUTURE') secName = 'FUTURES';
       if (secName === 'OPTION') secName = 'OPTIONS';
       cur = { name: secName, rows: [] };
@@ -196,8 +196,15 @@ function parseInput(text) {
       continue;
     }
     if (!cur) continue;
-    const m = line.match(/^(.+?):\s*(.+?)\s+(?:in|on)\s+(.+)$/i);
-    if (m) cur.rows.push({ name: m[1].trim(), returns: m[2].trim(), duration: m[3].trim() });
+    const m = line.match(/^(.+?):\s*(.+?)\s+(?:in\s+|on\s+)(.+)$/i);
+    if (m) {
+      let ret = m[2].trim();
+      // If futures/commodity value is plain number (no ₹ or %), add ₹
+      if (cur && /futures|commodity/i.test(cur.name) && !ret.startsWith('₹') && !ret.includes('%')) {
+        ret = '₹' + ret;
+      }
+      cur.rows.push({ name: m[1].trim(), returns: ret, duration: m[3].trim() });
+    }
   }
   return sections;
 }
