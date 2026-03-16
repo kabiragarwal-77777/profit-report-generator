@@ -146,6 +146,11 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
           </select>
         </div>
         <div class="control-group full">
+          <label>Table Spacing</label>
+          <input type="range" id="tableSpacing" min="50" max="200" value="100" step="5">
+          <div class="range-val" id="tableSpacingVal">100%</div>
+        </div>
+        <div class="control-group full">
           <label>SEBI Registration</label>
           <input type="text" id="sebiReg" value="INH000013776">
         </div>
@@ -229,6 +234,7 @@ function generate() {
   const sections = parseInput(text);
   const W        = parseInt(document.getElementById('cardWidth').value);
   const userScale= parseInt(document.getElementById('overallScale').value) / 100;
+  const tblSpace = parseInt(document.getElementById('tableSpacing').value) / 100;
   const fontFam  = document.getElementById('fontFamily').value;
   const sebi     = document.getElementById('sebiReg').value;
   const disc     = document.getElementById('disclaimer').value;
@@ -311,8 +317,8 @@ function generate() {
     const label = document.createElement('div');
     label.className = 'card-section';
     label.style.fontSize = sz.secFz + 'px';
-    label.style.marginTop = sz.secMt + 'px';
-    label.style.marginBottom = sz.secMb + 'px';
+    label.style.marginTop = Math.round(sz.secMt * tblSpace) + 'px';
+    label.style.marginBottom = Math.round(sz.secMb * tblSpace) + 'px';
     label.textContent = sec.name;
     container.appendChild(label);
 
@@ -349,7 +355,7 @@ function generate() {
       const tdD = document.createElement('td'); tdD.className = 'td-duration'; tdD.textContent = row.duration;
       [tdN, tdR, tdD].forEach(td => {
         td.style.fontSize = sz.tdFz + 'px';
-        td.style.padding = sz.tdPad + 'px ' + Math.round(sz.padLR * 0.4) + 'px';
+        td.style.padding = Math.round(sz.tdPad * tblSpace) + 'px ' + Math.round(sz.padLR * 0.4) + 'px';
       });
       tr.append(tdN, tdR, tdD);
       tbody.appendChild(tr);
@@ -377,6 +383,10 @@ document.getElementById('cardWidth').addEventListener('input', function () {
 });
 document.getElementById('overallScale').addEventListener('input', function () {
   document.getElementById('overallScaleVal').textContent = this.value + '%';
+  generate();
+});
+document.getElementById('tableSpacing').addEventListener('input', function () {
+  document.getElementById('tableSpacingVal').textContent = this.value + '%';
   generate();
 });
 ['fontFamily','sebiReg'].forEach(id => {
