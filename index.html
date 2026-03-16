@@ -199,9 +199,14 @@ function parseInput(text) {
     const m = line.match(/^(.+?):\s*(.+?)\s+(?:in\s+|on\s+)(.+)$/i);
     if (m) {
       let ret = m[2].trim();
-      // If futures/commodity value is plain number (no ₹ or %), add ₹
-      if (cur && /futures|commodity/i.test(cur.name) && !ret.startsWith('₹') && !ret.includes('%')) {
-        ret = '₹' + ret;
+      // Strip any existing ₹ or % to normalize
+      const bare = ret.replace(/[₹%,]/g, '').trim();
+      if (/futures|commodity/i.test(cur.name)) {
+        // Always show ₹ for Futures/Commodity
+        if (!ret.startsWith('₹')) ret = '₹' + ret;
+      } else {
+        // Always show % for Equity/Options
+        if (!ret.includes('%')) ret = ret + '%';
       }
       cur.rows.push({ name: m[1].trim(), returns: ret, duration: m[3].trim() });
     }
