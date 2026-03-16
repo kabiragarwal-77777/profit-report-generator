@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profit Report Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
+  body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
   .app { display: flex; height: 100vh; }
 
   /* LEFT PANEL */
@@ -17,7 +18,7 @@
   .panel-body { padding: 16px 24px; flex: 1; overflow-y: auto; }
 
   label { display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-  textarea { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 8px; color: #e0e0e0; font-family: 'Consolas', monospace; font-size: 13px; padding: 12px; resize: vertical; outline: none; transition: border-color .2s; }
+  textarea { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 8px; color: #e0e0e0; font-family: 'Consolas', monospace; font-size: 13px; padding: 12px; resize: vertical; outline: none; }
   textarea:focus { border-color: #4aeabc; }
 
   .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
@@ -40,133 +41,125 @@
   /* RIGHT — PREVIEW */
   .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 30px; background: #0b0d12; }
 
-  /* ═══════════════════════════════════════════
-     CARD — the generated report image
-     ═══════════════════════════════════════════ */
+  /* ═══════════════════════════════════
+     CARD — matches the template exactly
+     ═══════════════════════════════════ */
   .card {
     width: 600px;
-    background: radial-gradient(ellipse at 0% 50%, #0d2b27 0%, #0b1a1d 35%, #090e13 70%, #070a0f 100%);
-    padding: 28px 32px 22px;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 400px;
+    background: linear-gradient(135deg, #0a1f1c 0%, #0b161a 25%, #090e13 50%, #080c10 100%);
+    padding: 24px 30px 20px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     color: #fff;
     position: relative;
     overflow: hidden;
   }
-  /* left edge teal glow */
+  /* Left teal glow */
   .card::before {
     content: '';
     position: absolute;
-    left: -80px; top: 10%; width: 200px; height: 80%;
-    background: radial-gradient(ellipse, rgba(50,180,140,.15) 0%, transparent 70%);
+    left: -100px; top: 0; width: 250px; height: 100%;
+    background: radial-gradient(ellipse at center, rgba(40,160,120,.13) 0%, transparent 70%);
     pointer-events: none;
   }
-  /* bottom edge glow */
+  /* Bottom-left glow */
   .card::after {
     content: '';
     position: absolute;
-    left: -40px; bottom: -60px; width: 200px; height: 200px;
-    background: radial-gradient(ellipse, rgba(50,180,140,.10) 0%, transparent 70%);
+    left: -50px; bottom: -80px; width: 250px; height: 250px;
+    background: radial-gradient(ellipse, rgba(40,160,120,.08) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  /* SEBI REG — top right */
+  /* SEBI — top right, bold */
   .sebi {
     text-align: right;
-    font-size: 12px;
+    font-size: 11.5px;
     color: #fff;
     font-weight: 700;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 6px;
+    position: relative; z-index: 1;
+    letter-spacing: 0.3px;
   }
 
-  /* TITLE — "12 Profits Booked Today" */
+  /* TITLE */
   .title {
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
+    text-align: left;
+    margin: 8px 0 22px 8px;
+    position: relative; z-index: 1;
+    line-height: 1.1;
   }
-  .title-number {
-    font-size: 46px;
+  .title-green {
+    color: #4aeabc;
+    font-family: 'Playfair Display', Georgia, serif;
     font-weight: 800;
     font-style: italic;
-    color: #4aeabc;
+    font-size: 48px;
   }
-  .title-profits {
-    font-size: 46px;
-    font-weight: 800;
-    font-style: italic;
-    color: #4aeabc;
-  }
-  .title-booked {
-    font-size: 46px;
-    font-weight: 300;
-    font-style: italic;
+  .title-white {
     color: #ffffffdd;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 48px;
   }
 
-  /* SECTION HEADERS — "EQUITY", "FUTURES", etc */
+  /* SECTION LABEL */
   .section-label {
     text-align: center;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #ffffffcc;
-    margin: 20px 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    color: #ffffffbb;
+    margin: 18px 0 6px;
     text-transform: uppercase;
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 1;
   }
 
-  /* TABLES */
+  /* TABLE */
   .report-table {
     width: 100%;
     border-collapse: collapse;
-    position: relative;
-    z-index: 1;
-    border-left: 1px solid #ffffff30;
-    border-right: 1px solid #ffffff30;
+    position: relative; z-index: 1;
   }
+
+  /* Header row — top and bottom horizontal lines */
   .report-table thead th {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #ffffffdd;
-    padding: 10px 16px;
+    letter-spacing: 1.2px;
+    color: #ffffffcc;
+    padding: 8px 12px;
     text-transform: uppercase;
     text-align: center;
-    border-top: 1.5px solid #ffffff44;
-    border-bottom: 1.5px solid #ffffff44;
-    border-right: 1px solid #ffffff20;
-    background: rgba(255,255,255,0.03);
+    border-top: 1px solid #ffffff33;
+    border-bottom: 1px solid #ffffff33;
   }
-  .report-table thead th:last-child { border-right: none; }
 
+  /* Data rows — subtle bottom line only */
   .report-table tbody td {
-    padding: 9px 16px;
-    font-size: 14px;
+    padding: 7px 12px;
+    font-size: 13px;
     text-align: center;
-    border-bottom: 1px solid #ffffff20;
-    border-right: 1px solid #ffffff20;
+    border-bottom: 1px solid #ffffff15;
   }
-  .report-table tbody td:last-child { border-right: none; }
-  .report-table tbody tr:last-child td { border-bottom: 1.5px solid #ffffff44; }
+  .report-table tbody tr:last-child td {
+    border-bottom: 1px solid #ffffff28;
+  }
 
-  /* Column styles */
-  .report-table tbody td.col-name { color: #ddd; font-weight: 400; }
-  .report-table tbody td.col-returns { color: #4aeabc; font-weight: 700; }
-  .report-table tbody td.col-duration { color: #ddd; font-weight: 400; }
+  .col-name    { color: #ddd; font-weight: 400; }
+  .col-returns { color: #4aeabc; font-weight: 700; }
+  .col-duration{ color: #ddd; font-weight: 400; }
 
   /* DISCLAIMER */
   .disclaimer {
-    margin-top: 22px;
-    font-size: 8.5px;
-    color: #ffffff44;
+    margin-top: 24px;
+    font-size: 7.5px;
+    color: #ffffff40;
     line-height: 1.5;
     text-align: center;
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 1;
+    padding: 0 8px;
   }
 
   @media (max-width: 900px) {
@@ -179,7 +172,6 @@
 <body>
 
 <div class="app">
-  <!-- LEFT PANEL -->
   <div class="panel">
     <div class="panel-header">
       <h1>Profit Report Generator</h1>
@@ -206,52 +198,45 @@ CRUDEOIL26FEBFUT: 2.04% in 1 day"></textarea>
           <input type="range" id="cardWidth" min="400" max="1000" value="600">
           <div class="range-val" id="cardWidthVal">600px</div>
         </div>
-
         <div class="control-group">
           <label>Table Font Size</label>
           <select id="fontSize">
             <option value="11">Small</option>
-            <option value="13">Medium</option>
-            <option value="14" selected>Default</option>
-            <option value="16">Large</option>
-            <option value="18">Extra Large</option>
+            <option value="13" selected>Default</option>
+            <option value="15">Large</option>
+            <option value="17">Extra Large</option>
           </select>
         </div>
-
         <div class="control-group">
           <label>Title Size</label>
           <select id="titleSize">
-            <option value="34">Small</option>
+            <option value="36">Small</option>
             <option value="42">Medium</option>
-            <option value="46" selected>Default</option>
-            <option value="54">Large</option>
+            <option value="48" selected>Default</option>
+            <option value="56">Large</option>
           </select>
         </div>
-
         <div class="control-group">
           <label>Row Padding</label>
           <select id="rowPadding">
-            <option value="5">Compact</option>
-            <option value="9" selected>Normal</option>
-            <option value="13">Spacious</option>
-            <option value="17">Extra Spacious</option>
+            <option value="4">Compact</option>
+            <option value="7" selected>Normal</option>
+            <option value="11">Spacious</option>
+            <option value="15">Extra Spacious</option>
           </select>
         </div>
-
         <div class="control-group">
           <label>Section Spacing</label>
           <select id="tableGap">
-            <option value="12">Tight</option>
-            <option value="20" selected>Normal</option>
-            <option value="30">Wide</option>
+            <option value="10">Tight</option>
+            <option value="18" selected>Normal</option>
+            <option value="28">Wide</option>
           </select>
         </div>
-
         <div class="control-group full">
           <label>SEBI Registration</label>
           <input type="text" id="sebiReg" value="INH000013776">
         </div>
-
         <div class="control-group full">
           <label>Disclaimer</label>
           <textarea id="disclaimer" rows="3" style="font-family:'Segoe UI',sans-serif;font-size:11px;">Investment in securities market are subject to market risks. Read all the related documents carefully before investing. The securities quoted are for illustration only and are not recommendatory. The information provided is intended for educational purposes only, for further disclosures, visit https://univest.in / Univest App.</textarea>
@@ -265,32 +250,22 @@ CRUDEOIL26FEBFUT: 2.04% in 1 day"></textarea>
     </div>
   </div>
 
-  <!-- RIGHT — PREVIEW -->
   <div class="preview-area">
     <div class="card" id="card">
-      <!-- SEBI -->
       <div class="sebi" id="sebiLine">SEBI Reg. : INH000013776</div>
-
-      <!-- TITLE -->
-      <div class="title">
-        <span class="title-number" id="profitCount">0</span>
-        <span class="title-profits"> Profits </span>
-        <span class="title-booked">Booked Today</span>
+      <div class="title" id="titleBlock">
+        <span class="title-green" id="profitCount">0</span>
+        <span class="title-green"> Profits </span>
+        <span class="title-white">Booked Today</span>
       </div>
-
-      <!-- TABLES -->
       <div id="tablesContainer"></div>
-
-      <!-- DISCLAIMER -->
       <div class="disclaimer" id="disclaimerDisplay"></div>
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <script>
-/* ─── PARSER ─── */
 function parseInput(text) {
   const sections = [];
   let cur = null;
@@ -309,7 +284,6 @@ function parseInput(text) {
   return sections;
 }
 
-/* ─── COLUMN HEADERS PER SECTION ─── */
 const COL_HEADERS = {
   'EQUITY':    ['STOCK NAME', 'RETURNS',          'DURATION'],
   'FUTURES':   ['STOCK NAME', 'RETURNS/LOT',      'DURATION'],
@@ -317,18 +291,16 @@ const COL_HEADERS = {
   'COMMODITY': ['STOCK NAME', 'RETURNS',          'DURATION'],
 };
 
-/* ─── GENERATE ─── */
 function generate() {
-  const text  = document.getElementById('inputText').value;
+  const text     = document.getElementById('inputText').value;
   const sections = parseInput(text);
-
-  const cardW = document.getElementById('cardWidth').value;
-  const fSize = document.getElementById('fontSize').value;
-  const tSize = document.getElementById('titleSize').value;
-  const rPad  = document.getElementById('rowPadding').value;
-  const tGap  = document.getElementById('tableGap').value;
-  const sebi  = document.getElementById('sebiReg').value;
-  const disc  = document.getElementById('disclaimer').value;
+  const cardW    = document.getElementById('cardWidth').value;
+  const fSize    = document.getElementById('fontSize').value;
+  const tSize    = document.getElementById('titleSize').value;
+  const rPad     = document.getElementById('rowPadding').value;
+  const tGap     = document.getElementById('tableGap').value;
+  const sebi     = document.getElementById('sebiReg').value;
+  const disc     = document.getElementById('disclaimer').value;
 
   const card = document.getElementById('card');
   card.style.width = cardW + 'px';
@@ -336,70 +308,55 @@ function generate() {
   // SEBI
   document.getElementById('sebiLine').textContent = 'SEBI Reg. : ' + sebi;
 
-  // Title — count total trades
+  // Title — auto-count
   const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
   document.getElementById('profitCount').textContent = total;
 
   // Title size
-  document.querySelectorAll('.title-number, .title-profits, .title-booked').forEach(el => {
+  document.querySelectorAll('.title-green, .title-white').forEach(el => {
     el.style.fontSize = tSize + 'px';
   });
 
   // Disclaimer
   document.getElementById('disclaimerDisplay').textContent = disc;
 
-  // Build tables
+  // Tables
   const container = document.getElementById('tablesContainer');
   container.innerHTML = '';
 
   for (const sec of sections) {
-    // Section label
     const label = document.createElement('div');
     label.className = 'section-label';
     label.style.marginTop = tGap + 'px';
     label.textContent = sec.name;
     container.appendChild(label);
 
-    // Table
     const headers = COL_HEADERS[sec.name] || COL_HEADERS['EQUITY'];
     const table = document.createElement('table');
     table.className = 'report-table';
 
-    // Header
     const thead = document.createElement('thead');
     const headRow = document.createElement('tr');
     headers.forEach(h => {
       const th = document.createElement('th');
       th.textContent = h;
-      th.style.fontSize = (parseInt(fSize) - 1) + 'px';
+      th.style.fontSize = (parseInt(fSize) - 2) + 'px';
       headRow.appendChild(th);
     });
     thead.appendChild(headRow);
     table.appendChild(thead);
 
-    // Body
     const tbody = document.createElement('tbody');
     for (const row of sec.rows) {
       const tr = document.createElement('tr');
-
-      const tdName = document.createElement('td');
-      tdName.className = 'col-name';
-      tdName.textContent = row.name;
-
-      const tdRet = document.createElement('td');
-      tdRet.className = 'col-returns';
-      tdRet.textContent = row.returns;
-
-      const tdDur = document.createElement('td');
-      tdDur.className = 'col-duration';
-      tdDur.textContent = row.duration;
-
-      [tdName, tdRet, tdDur].forEach(td => {
+      const tdN = document.createElement('td'); tdN.className = 'col-name';     tdN.textContent = row.name;
+      const tdR = document.createElement('td'); tdR.className = 'col-returns';  tdR.textContent = row.returns;
+      const tdD = document.createElement('td'); tdD.className = 'col-duration'; tdD.textContent = row.duration;
+      [tdN, tdR, tdD].forEach(td => {
         td.style.fontSize = fSize + 'px';
-        td.style.padding = rPad + 'px 16px';
+        td.style.padding = rPad + 'px 12px';
       });
-
-      tr.append(tdName, tdRet, tdDur);
+      tr.append(tdN, tdR, tdD);
       tbody.appendChild(tr);
     }
     table.appendChild(tbody);
@@ -407,7 +364,6 @@ function generate() {
   }
 }
 
-/* ─── DOWNLOAD ─── */
 function download() {
   const card = document.getElementById('card');
   html2canvas(card, { scale: 2, backgroundColor: null, useCORS: true }).then(canvas => {
@@ -418,7 +374,7 @@ function download() {
   });
 }
 
-/* ─── LIVE CONTROLS ─── */
+// Live updates
 document.getElementById('cardWidth').addEventListener('input', function () {
   document.getElementById('cardWidthVal').textContent = this.value + 'px';
   generate();
@@ -426,11 +382,9 @@ document.getElementById('cardWidth').addEventListener('input', function () {
 ['fontSize','titleSize','rowPadding','tableGap','sebiReg'].forEach(id => {
   document.getElementById(id).addEventListener('change', generate);
 });
-// Auto-generate on text paste / input
 document.getElementById('inputText').addEventListener('input', generate);
 document.getElementById('disclaimer').addEventListener('input', generate);
 
-// Init disclaimer on load
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('disclaimerDisplay').textContent = document.getElementById('disclaimer').value;
 });
