@@ -315,8 +315,8 @@ function generate() {
   const container = document.getElementById('tablesContainer');
   container.innerHTML = '';
 
-  const ORDER = ['EQUITY', 'OPTIONS', 'FUTURES', 'COMMODITY'];
-  sections.sort((a, b) => ORDER.indexOf(a.name) - ORDER.indexOf(b.name));
+  const ORDER = { 'EQUITY': 0, 'OPTIONS': 1, 'FUTURES': 2, 'COMMODITY': 3 };
+  sections.sort((a, b) => (ORDER[a.name] ?? 99) - (ORDER[b.name] ?? 99));
 
   for (const sec of sections) {
     // Section label
