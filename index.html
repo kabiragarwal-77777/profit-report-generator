@@ -4,149 +4,85 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profit Report Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=Inter:wght@300;400;600;700;800&family=Roboto:wght@300;400;700&family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto:wght@300;400;700&family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
+  body { font-family: 'Inter', 'Segoe UI', sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
   .app { display: flex; height: 100vh; }
 
-  /* LEFT PANEL */
-  .panel { width: 420px; min-width: 380px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; }
-  .panel-header { padding: 20px 24px 12px; border-bottom: 1px solid #2a2d3a; }
-  .panel-header h1 { font-size: 18px; color: #4aeabc; font-weight: 700; }
-  .panel-header p { font-size: 12px; color: #888; margin-top: 4px; }
-  .panel-body { padding: 16px 24px; flex: 1; overflow-y: auto; }
+  .panel { width: 400px; min-width: 360px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; }
+  .panel-header { padding: 18px 22px 10px; border-bottom: 1px solid #2a2d3a; }
+  .panel-header h1 { font-size: 17px; color: #4aeabc; font-weight: 700; }
+  .panel-header p { font-size: 11px; color: #888; margin-top: 3px; }
+  .panel-body { padding: 14px 22px; flex: 1; overflow-y: auto; }
 
-  label { display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-  textarea { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 8px; color: #e0e0e0; font-family: 'Consolas', monospace; font-size: 13px; padding: 12px; resize: vertical; outline: none; }
+  label { display: block; font-size: 11px; font-weight: 600; color: #aaa; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  textarea { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 8px; color: #e0e0e0; font-family: 'Consolas', monospace; font-size: 12px; padding: 10px; resize: vertical; outline: none; }
   textarea:focus { border-color: #4aeabc; }
 
-  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
   .control-group { display: flex; flex-direction: column; }
   .control-group.full { grid-column: 1 / -1; }
-  input[type="text"], select { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 6px; color: #e0e0e0; font-size: 13px; padding: 8px 10px; outline: none; }
+  input[type="text"], select { width: 100%; background: #1e2130; border: 1px solid #2e3148; border-radius: 6px; color: #e0e0e0; font-size: 12px; padding: 7px 9px; outline: none; }
   input:focus, select:focus { border-color: #4aeabc; }
 
-  .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
+  .btn { padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; }
   .btn-primary { background: #4aeabc; color: #0f1117; }
   .btn-primary:hover { background: #3cd4a8; }
   .btn-download { background: #2a2d3a; color: #4aeabc; border: 1px solid #4aeabc; }
   .btn-download:hover { background: #4aeabc22; }
-  .actions { display: flex; gap: 10px; margin-top: 20px; }
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
   .actions .btn { flex: 1; }
 
   input[type="range"] { width: 100%; accent-color: #4aeabc; }
-  .range-val { font-size: 11px; color: #4aeabc; text-align: right; margin-top: 2px; }
+  .range-val { font-size: 10px; color: #4aeabc; text-align: right; margin-top: 1px; }
 
-  /* RIGHT — PREVIEW */
-  .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 30px; background: #0b0d12; }
+  .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 24px; background: #0b0d12; }
 
-  /* ════════ THE CARD ════════ */
+  /* ════════ CARD ════════ */
   .card {
-    width: 600px;
     background: url('bg.jpg') center / 100% 100% no-repeat;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     color: #fff;
     position: relative;
     overflow: hidden;
   }
+  .card-inner { position: relative; z-index: 1; }
 
-  /* Inner wrapper with padding */
-  .card-inner {
-    position: relative;
-    z-index: 1;
-    padding: 24px 30px 18px;
-  }
+  .card-sebi { text-align: right; font-weight: 700; color: #d4c97a; }
+  .card-title { text-align: left; line-height: 1.08; white-space: nowrap; }
+  .card-title .t-green { font-family: 'Inter', sans-serif; font-weight: 800; color: #4aeabc; }
+  .card-title .t-white { font-family: 'Inter', sans-serif; font-weight: 700; color: #ffffffdd; }
 
-  /* SEBI */
-  .card-sebi {
-    text-align: right;
-    font-size: 13px;
-    font-weight: 700;
-    color: #d4c97a;
-    margin-bottom: 6px;
-  }
+  .card-section { text-align: center; font-weight: 700; letter-spacing: 2.5px; color: rgba(255,255,255,.85); text-transform: uppercase; }
 
-  /* TITLE */
-  .card-title {
-    text-align: left;
-    margin: 4px 0 18px 2px;
-    line-height: 1.05;
-    white-space: nowrap;
-  }
-  .card-title .t-green {
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    font-style: normal;
-    font-weight: 800;
-    color: #4aeabc;
-  }
-  .card-title .t-white {
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    color: #ffffffdd;
-  }
-
-  /* SECTION LABEL */
-  .card-section {
-    text-align: center;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    color: rgba(255,255,255,.85);
-    text-transform: uppercase;
-  }
-
-  /* TABLE — fixed column widths for alignment */
-  .card-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
-  .card-table col.c-name    { width: 35%; }
-  .card-table col.c-returns { width: 35%; }
-  .card-table col.c-dur     { width: 30%; }
+  .card-table { width: 100%; border-collapse: collapse; table-layout: fixed; border-left: 1px solid rgba(255,255,255,.4); border-right: 1px solid rgba(255,255,255,.4); }
+  .card-table col.c-name { width: 35%; }
+  .card-table col.c-ret  { width: 35%; }
+  .card-table col.c-dur  { width: 30%; }
 
   .card-table thead th {
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    color: #d4c97a;
-    text-transform: uppercase;
-    text-align: center;
+    font-weight: 700; letter-spacing: 1.2px; color: #d4c97a;
+    text-transform: uppercase; text-align: center;
     border-top: 1px solid rgba(255,255,255,.4);
     border-bottom: 1px solid rgba(255,255,255,.4);
     border-right: 1px solid rgba(255,255,255,.2);
   }
   .card-table thead th:last-child { border-right: none; }
-
   .card-table tbody td {
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255,.22);
     border-right: 1px solid rgba(255,255,255,.2);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .card-table tbody td:last-child { border-right: none; }
-  .card-table tbody tr:last-child td {
-    border-bottom: 1px solid rgba(255,255,255,.4);
-  }
-
-  /* Outer table border (left + right) */
-  .card-table { border-left: 1px solid rgba(255,255,255,.4); border-right: 1px solid rgba(255,255,255,.4); }
+  .card-table tbody tr:last-child td { border-bottom: 1px solid rgba(255,255,255,.4); }
 
   .td-name     { color: rgba(255,255,255,.8); }
   .td-returns  { color: #4aeabc; font-weight: 700; }
   .td-duration { color: rgba(255,255,255,.8); }
 
-  /* DISCLAIMER */
-  .card-disclaimer {
-    font-size: 7.5px;
-    color: rgba(200,195,160,.45);
-    line-height: 1.5;
-    text-align: center;
-    padding: 0 4px;
-    margin-top: 16px;
-  }
+  .card-disclaimer { color: rgba(200,195,160,.45); line-height: 1.5; text-align: center; }
 
   @media (max-width: 900px) {
     .app { flex-direction: column; height: auto; }
@@ -161,10 +97,10 @@
   <div class="panel">
     <div class="panel-header">
       <h1>Profit Report Generator</h1>
-      <p>Paste your trade data &amp; download the graphic</p>
+      <p>Paste trade data, auto-scales to fit</p>
     </div>
     <div class="panel-body">
-      <label>Trade Data (paste here)</label>
+      <label>Trade Data</label>
       <textarea id="inputText" rows="14">Equity:
 OIL: 3.33% in 5 Days
 TATAINVEST: 2.02% in 1 Hour
@@ -190,44 +126,15 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
           <div class="range-val" id="cardWidthVal">600px</div>
         </div>
         <div class="control-group full">
-          <label>Overall Font Scale</label>
+          <label>Overall Scale (%)</label>
           <input type="range" id="overallScale" min="50" max="150" value="100" step="5">
           <div class="range-val" id="overallScaleVal">100%</div>
-        </div>
-        <div class="control-group">
-          <label>Table Font Size</label>
-          <select id="fontSize">
-            <option value="6">6px — Micro</option>
-            <option value="7">7px — Tiny</option>
-            <option value="8">8px — Extra Small</option>
-            <option value="9">9px — Small</option>
-            <option value="10">10px — Compact</option>
-            <option value="11">11px — Medium</option>
-            <option value="12">12px — Regular</option>
-            <option value="13" selected>13px — Default</option>
-            <option value="14">14px — Large</option>
-            <option value="15">15px — Bigger</option>
-            <option value="16">16px — Extra Large</option>
-            <option value="18">18px — Huge</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label>Title Size</label>
-          <select id="titleSize">
-            <option value="28">28px — Tiny</option>
-            <option value="32">32px — Small</option>
-            <option value="36">36px — Compact</option>
-            <option value="42">42px — Medium</option>
-            <option value="48" selected>48px — Default</option>
-            <option value="54">54px — Large</option>
-            <option value="60">60px — Extra Large</option>
-          </select>
         </div>
         <div class="control-group full">
           <label>Font Family</label>
           <select id="fontFamily">
-            <option value="'Segoe UI', system-ui, sans-serif" selected>Segoe UI (Default)</option>
-            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Inter', sans-serif" selected>Inter (Default)</option>
+            <option value="'Segoe UI', system-ui, sans-serif">Segoe UI</option>
             <option value="'Arial', sans-serif">Arial</option>
             <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
             <option value="'Roboto', sans-serif">Roboto</option>
@@ -238,30 +145,13 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
             <option value="'Nunito', sans-serif">Nunito</option>
           </select>
         </div>
-        <div class="control-group">
-          <label>Row Padding</label>
-          <select id="rowPadding">
-            <option value="4">Compact</option>
-            <option value="7" selected>Normal</option>
-            <option value="11">Spacious</option>
-            <option value="15">Extra Spacious</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label>Section Spacing</label>
-          <select id="tableGap">
-            <option value="8">Tight</option>
-            <option value="14" selected>Normal</option>
-            <option value="24">Wide</option>
-          </select>
-        </div>
         <div class="control-group full">
           <label>SEBI Registration</label>
           <input type="text" id="sebiReg" value="INH000013776">
         </div>
         <div class="control-group full">
           <label>Disclaimer</label>
-          <textarea id="disclaimer" rows="3" style="font-family:'Segoe UI',sans-serif;font-size:11px;">Investment in securities market are subject to market risks. Read all the related documents carefully before investing. The securities quoted are for illustration only and are not recommendatory. The information provided is intended for educational purposes only, for further disclosures, visit https://univest.in / Univest App.</textarea>
+          <textarea id="disclaimer" rows="2" style="font-family:'Segoe UI',sans-serif;font-size:11px;">Investment in securities market are subject to market risks. Read all the related documents carefully before investing. The securities quoted are for illustration only and are not recommendatory. The information provided is intended for educational purposes only, for further disclosures, visit https://univest.in / Univest App.</textarea>
         </div>
       </div>
 
@@ -275,7 +165,7 @@ NIFTY 50: 2.93% in 57 Mins</textarea>
   <div class="preview-area">
     <div class="card" id="card">
       <div class="card-inner" id="cardInner">
-        <div class="card-sebi" id="sebiLine">SEBI Reg. : INH000013776</div>
+        <div class="card-sebi" id="sebiLine"></div>
         <div class="card-title" id="titleBlock"></div>
         <div id="tablesContainer"></div>
         <div class="card-disclaimer" id="disclaimerDisplay"></div>
@@ -311,71 +201,118 @@ const COL_HEADERS = {
   'COMMODITY': ['STOCK NAME', 'RETURNS',          'DURATION'],
 };
 
+/*
+  Proportional sizing based on the template:
+  Template = 600px wide, ~750px tall, 12 trades, 3 sections.
+  All sizes expressed as % of card width (W).
+    - Card padding:      4% W (top/bottom), 5% W (left/right)
+    - SEBI font:         1.9% W
+    - Title font:        8% W
+    - Title margin-bot:  3% W
+    - Section label font:2% W
+    - Section gap-top:   2.3% W
+    - Section gap-bot:   1% W
+    - Table header font: 1.9% W
+    - Table header pad:  1.3% W
+    - Data font:         2.2% W
+    - Data row pad:      1.2% W
+    - Disclaimer font:   1.3% W
+    - Disclaimer margin: 2.5% W
+
+  For N trades and S sections, target card height =
+    padding + sebi + title + S*(label+header) + N*row + disclaimer
+  If height > W*1.25, scale everything down proportionally.
+*/
+
 function generate() {
   const text     = document.getElementById('inputText').value;
   const sections = parseInput(text);
-  const cardW    = parseInt(document.getElementById('cardWidth').value);
-  let   fSize    = parseInt(document.getElementById('fontSize').value);
-  let   tSize    = parseInt(document.getElementById('titleSize').value);
-  let   rPad     = parseInt(document.getElementById('rowPadding').value);
-  let   tGap     = parseInt(document.getElementById('tableGap').value);
+  const W        = parseInt(document.getElementById('cardWidth').value);
+  const userScale= parseInt(document.getElementById('overallScale').value) / 100;
+  const fontFam  = document.getElementById('fontFamily').value;
   const sebi     = document.getElementById('sebiReg').value;
   const disc     = document.getElementById('disclaimer').value;
-  const fontFam  = document.getElementById('fontFamily').value;
-  const oScale   = parseInt(document.getElementById('overallScale').value) / 100;
 
+  const totalRows = sections.reduce((s, sec) => s + sec.rows.length, 0);
+  const S         = sections.length;
+
+  // Base sizes as fraction of W (tuned from template at 600px / 12 trades / 3 sections)
+  const BASE = {
+    padTB:      0.040,  // top & bottom padding
+    padLR:      0.050,  // left & right padding
+    sebiFz:     0.019,  // SEBI font
+    sebiMb:     0.010,  // SEBI margin bottom
+    titleFz:    0.080,  // title font
+    titleMb:    0.030,  // title margin bottom
+    secFz:      0.021,  // section label font
+    secMt:      0.025,  // section gap top
+    secMb:      0.010,  // section gap bottom
+    thFz:       0.019,  // table header font
+    thPad:      0.014,  // table header padding
+    tdFz:       0.022,  // data cell font
+    tdPad:      0.012,  // data cell padding
+    discFz:     0.013,  // disclaimer font
+    discMt:     0.028,  // disclaimer margin top
+  };
+
+  // Calculate the "natural" height if we used these base proportions
+  const px = (frac) => frac * W;
+  const naturalH =
+    px(BASE.padTB) * 2 +                                          // top + bottom padding
+    px(BASE.sebiFz) + px(BASE.sebiMb) +                           // SEBI line
+    px(BASE.titleFz) * 1.1 + px(BASE.titleMb) +                   // title
+    S * (px(BASE.secFz) + px(BASE.secMt) + px(BASE.secMb) +       // section labels
+         px(BASE.thFz) + px(BASE.thPad) * 2) +                    // table headers
+    totalRows * (px(BASE.tdFz) + px(BASE.tdPad) * 2) +            // data rows
+    px(BASE.discFz) * 3 + px(BASE.discMt);                        // disclaimer (~3 lines)
+
+  // Target max height = W * 1.25 (from template aspect ratio ~4:5)
+  const maxH = W * 1.25;
+  const autoScale = naturalH > maxH ? maxH / naturalH : 1;
+  const scale = autoScale * userScale;
+
+  // Compute final pixel sizes
+  const sz = {};
+  for (const k in BASE) sz[k] = Math.max(1, Math.round(px(BASE[k]) * scale));
+
+  // Apply to card
   const card = document.getElementById('card');
-  card.style.width = cardW + 'px';
+  card.style.width = W + 'px';
   card.style.fontFamily = fontFam;
 
-  // Apply overall scale to all sizes
-  fSize = Math.round(fSize * oScale);
-  tSize = Math.round(tSize * oScale);
-  rPad  = Math.round(rPad * oScale);
-  tGap  = Math.round(tGap * oScale);
-
-  // Count total trades
-  const total = sections.reduce((s, sec) => s + sec.rows.length, 0);
-
-  // Auto-scale: if many trades, shrink sizes proportionally
-  // Base: 12 trades fits comfortably. Scale down for more.
-  const scale = total <= 12 ? 1 : Math.max(0.55, 12 / total);
-  if (scale < 1) {
-    fSize  = Math.max(9, Math.round(fSize * scale));
-    tSize  = Math.max(24, Math.round(tSize * scale));
-    rPad   = Math.max(2, Math.round(rPad * scale));
-    tGap   = Math.max(4, Math.round(tGap * scale));
-  }
+  const inner = document.getElementById('cardInner');
+  inner.style.padding = sz.padTB + 'px ' + sz.padLR + 'px';
 
   // SEBI
-  document.getElementById('sebiLine').textContent = 'SEBI Reg. : ' + sebi;
-  document.getElementById('sebiLine').style.fontSize = Math.round(13 * oScale) + 'px';
-
-  // Disclaimer font scale
-  document.getElementById('disclaimerDisplay').style.fontSize = Math.max(5, Math.round(7.5 * oScale)) + 'px';
+  const sebiEl = document.getElementById('sebiLine');
+  sebiEl.textContent = 'SEBI Reg. : ' + sebi;
+  sebiEl.style.fontSize = sz.sebiFz + 'px';
+  sebiEl.style.marginBottom = sz.sebiMb + 'px';
 
   // Title
   const titleBlock = document.getElementById('titleBlock');
+  titleBlock.style.marginBottom = sz.titleMb + 'px';
   titleBlock.innerHTML =
-    '<span class="t-green" style="font-size:' + tSize + 'px">' + total + ' Profits </span>' +
-    '<span class="t-white" style="font-size:' + tSize + 'px">Booked Today</span>';
+    '<span class="t-green" style="font-size:' + sz.titleFz + 'px">' + totalRows + ' Profits </span>' +
+    '<span class="t-white" style="font-size:' + sz.titleFz + 'px">Booked Today</span>';
 
   // Disclaimer
-  document.getElementById('disclaimerDisplay').textContent = disc;
+  const discEl = document.getElementById('disclaimerDisplay');
+  discEl.textContent = disc;
+  discEl.style.fontSize = sz.discFz + 'px';
+  discEl.style.marginTop = sz.discMt + 'px';
 
   // Tables
   const container = document.getElementById('tablesContainer');
   container.innerHTML = '';
 
-  const hFontSize = Math.max(8, fSize - 2);
-
   for (const sec of sections) {
     // Section label
     const label = document.createElement('div');
     label.className = 'card-section';
-    label.style.marginTop = tGap + 'px';
-    label.style.marginBottom = Math.max(3, Math.round(tGap * 0.4)) + 'px';
-    label.style.fontSize = Math.max(9, fSize - 1) + 'px';
+    label.style.fontSize = sz.secFz + 'px';
+    label.style.marginTop = sz.secMt + 'px';
+    label.style.marginBottom = sz.secMb + 'px';
     label.textContent = sec.name;
     container.appendChild(label);
 
@@ -384,29 +321,26 @@ function generate() {
     const table = document.createElement('table');
     table.className = 'card-table';
 
-    // Colgroup for fixed widths
     const colgroup = document.createElement('colgroup');
-    ['c-name','c-returns','c-dur'].forEach(cls => {
+    ['c-name','c-ret','c-dur'].forEach(cls => {
       const col = document.createElement('col');
       col.className = cls;
       colgroup.appendChild(col);
     });
     table.appendChild(colgroup);
 
-    // Thead
     const thead = document.createElement('thead');
     const htr = document.createElement('tr');
     headers.forEach(h => {
       const th = document.createElement('th');
       th.textContent = h;
-      th.style.fontSize = hFontSize + 'px';
-      th.style.padding = Math.max(3, rPad) + 'px 8px';
+      th.style.fontSize = sz.thFz + 'px';
+      th.style.padding = sz.thPad + 'px ' + Math.round(sz.padLR * 0.4) + 'px';
       htr.appendChild(th);
     });
     thead.appendChild(htr);
     table.appendChild(thead);
 
-    // Tbody
     const tbody = document.createElement('tbody');
     for (const row of sec.rows) {
       const tr = document.createElement('tr');
@@ -414,8 +348,8 @@ function generate() {
       const tdR = document.createElement('td'); tdR.className = 'td-returns';  tdR.textContent = row.returns;
       const tdD = document.createElement('td'); tdD.className = 'td-duration'; tdD.textContent = row.duration;
       [tdN, tdR, tdD].forEach(td => {
-        td.style.fontSize = fSize + 'px';
-        td.style.padding = rPad + 'px 8px';
+        td.style.fontSize = sz.tdFz + 'px';
+        td.style.padding = sz.tdPad + 'px ' + Math.round(sz.padLR * 0.4) + 'px';
       });
       tr.append(tdN, tdR, tdD);
       tbody.appendChild(tr);
@@ -445,13 +379,12 @@ document.getElementById('overallScale').addEventListener('input', function () {
   document.getElementById('overallScaleVal').textContent = this.value + '%';
   generate();
 });
-['fontSize','titleSize','rowPadding','tableGap','sebiReg','fontFamily'].forEach(id => {
+['fontFamily','sebiReg'].forEach(id => {
   document.getElementById(id).addEventListener('change', generate);
 });
 document.getElementById('inputText').addEventListener('input', generate);
 document.getElementById('disclaimer').addEventListener('input', generate);
 
-// Generate on load
 window.addEventListener('DOMContentLoaded', generate);
 </script>
 </body>
