@@ -3,17 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profit Report Generator</title>
+<title>Univest Creative Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Roboto:wght@300;400;700&family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Inter', 'Segoe UI', sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; }
   .app { display: flex; height: 100vh; }
 
-  .panel { width: 400px; min-width: 360px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; }
-  .panel-header { padding: 18px 22px 10px; border-bottom: 1px solid #2a2d3a; }
-  .panel-header h1 { font-size: 17px; color: #4aeabc; font-weight: 700; }
-  .panel-header p { font-size: 11px; color: #888; margin-top: 3px; }
+  /* ════════ TABS ════════ */
+  .panel { width: 420px; min-width: 380px; background: #161922; border-right: 1px solid #2a2d3a; display: flex; flex-direction: column; }
+  .tab-bar { display: flex; border-bottom: 1px solid #2a2d3a; background: #12141c; }
+  .tab-btn { flex: 1; padding: 13px 10px; text-align: center; font-size: 12px; font-weight: 600; color: #666; cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: all .15s; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tab-btn:hover { color: #aaa; background: #1a1d28; }
+  .tab-btn.active { color: #4aeabc; border-bottom-color: #4aeabc; background: #161922; }
+
+  .tab-content { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+  .tab-content.active { display: flex; }
+
+  .panel-header { padding: 14px 22px 8px; border-bottom: 1px solid #2a2d3a; }
+  .panel-header h1 { font-size: 16px; color: #4aeabc; font-weight: 700; }
+  .panel-header p { font-size: 11px; color: #888; margin-top: 2px; }
   .panel-body { padding: 14px 22px; flex: 1; overflow-y: auto; }
 
   label { display: block; font-size: 11px; font-weight: 600; color: #aaa; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -31,6 +40,8 @@
   .btn-primary:hover { background: #3cd4a8; }
   .btn-download { background: #2a2d3a; color: #4aeabc; border: 1px solid #4aeabc; }
   .btn-download:hover { background: #4aeabc22; }
+  .btn-secondary { background: #2a2d3a; color: #ccc; border: 1px solid #3a3d4a; }
+  .btn-secondary:hover { background: #33364a; }
   .actions { display: flex; gap: 10px; margin-top: 16px; }
   .actions .btn { flex: 1; }
 
@@ -39,7 +50,16 @@
 
   .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 24px; background: #0b0d12; }
 
-  /* ════════ CARD ════════ */
+  /* ════════ FILE UPLOAD ════════ */
+  .file-upload { position: relative; }
+  .file-upload input[type="file"] { display: none; }
+  .file-upload-btn { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #1e2130; border: 1px dashed #3e4158; border-radius: 8px; color: #888; font-size: 11px; cursor: pointer; transition: all .15s; }
+  .file-upload-btn:hover { border-color: #4aeabc; color: #4aeabc; }
+  .file-upload-btn.has-file { border-color: #4aeabc55; color: #4aeabc; border-style: solid; }
+  .file-upload-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .file-name { font-size: 10px; color: #4aeabc; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ════════ PROFIT REPORT CARD ════════ */
   .card {
     background: url('bg.jpg') center / 100% 100% no-repeat;
     font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -84,6 +104,29 @@
 
   .card-disclaimer { color: rgba(200,200,200,.6); line-height: 1.5; text-align: center; }
 
+  /* ════════ IPO AD PREVIEW ════════ */
+  .ipo-canvas-wrap { position: relative; }
+  .ipo-canvas-wrap canvas { display: block; max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 24px rgba(0,0,0,.5); }
+
+  /* ════════ STATUS MSG ════════ */
+  .status-msg { font-size: 11px; color: #888; margin-top: 8px; text-align: center; min-height: 16px; }
+  .status-msg.error { color: #ff6b6b; }
+  .status-msg.success { color: #4aeabc; }
+
+  /* ════════ PROGRESS STEPS ════════ */
+  .ipo-step { font-size: 12px; color: #555; padding: 5px 0; display: flex; align-items: center; gap: 8px; }
+  .ipo-step .step-icon { font-size: 14px; width: 18px; text-align: center; }
+  .ipo-step.active { color: #4aeabc; }
+  .ipo-step.active .step-icon { animation: pulse 1s infinite; }
+  .ipo-step.done { color: #3cd4a8; }
+  .ipo-step.done .step-icon { color: #4aeabc; }
+  .ipo-step.error { color: #ff6b6b; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* ════════ IPO PREVIEW IMAGE ════════ */
+  #ipoPreviewImg { max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 24px rgba(0,0,0,.5); }
+  .ipo-placeholder { color: #333; font-size: 14px; text-align: center; padding: 40px; border: 1px dashed #2a2d3a; border-radius: 8px; }
+
   @media (max-width: 900px) {
     .app { flex-direction: column; height: auto; }
     .panel { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid #2a2d3a; }
@@ -95,13 +138,21 @@
 
 <div class="app">
   <div class="panel">
-    <div class="panel-header">
-      <h1>Profit Report Generator</h1>
-      <p>Paste trade data, auto-scales to fit</p>
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('profit')">Profit Report</button>
+      <button class="tab-btn" onclick="switchTab('ipo')">IPO Ad Creator</button>
     </div>
-    <div class="panel-body">
-      <label>Trade Data</label>
-      <textarea id="inputText" rows="14">Equity:
+
+    <!-- ═══════════ TAB 1: PROFIT REPORT ═══════════ -->
+    <div class="tab-content active" id="tab-profit">
+      <div class="panel-header">
+        <h1>Profit Report Generator</h1>
+        <p>Paste trade data, auto-scales to fit</p>
+      </div>
+      <div class="panel-body">
+        <label>Trade Data</label>
+        <textarea id="inputText" rows="14">Equity:
 OIL: 3.33% in 5 Days
 TATAINVEST: 2.02% in 1 Hour
 
@@ -119,68 +170,179 @@ BDL: 5.94% in 46 Mins
 CANBK: 4.39% in 22 Mins
 NIFTY 50: 2.93% in 57 Mins</textarea>
 
-      <div class="controls">
-        <div class="control-group full">
-          <label>Card Width (px)</label>
-          <input type="range" id="cardWidth" min="400" max="1000" value="600">
-          <div class="range-val" id="cardWidthVal">600px</div>
+        <div class="controls">
+          <div class="control-group full">
+            <label>Card Width (px)</label>
+            <input type="range" id="cardWidth" min="400" max="1000" value="600">
+            <div class="range-val" id="cardWidthVal">600px</div>
+          </div>
+          <div class="control-group full">
+            <label>Overall Scale (%)</label>
+            <input type="range" id="overallScale" min="50" max="150" value="100" step="5">
+            <div class="range-val" id="overallScaleVal">100%</div>
+          </div>
+          <div class="control-group full">
+            <label>Font Family</label>
+            <select id="fontFamily">
+              <option value="'Inter', sans-serif" selected>Inter (Default)</option>
+              <option value="'Segoe UI', system-ui, sans-serif">Segoe UI</option>
+              <option value="'Arial', sans-serif">Arial</option>
+              <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+              <option value="'Roboto', sans-serif">Roboto</option>
+              <option value="'Poppins', sans-serif">Poppins</option>
+              <option value="'Open Sans', sans-serif">Open Sans</option>
+              <option value="'Lato', sans-serif">Lato</option>
+              <option value="'Montserrat', sans-serif">Montserrat</option>
+              <option value="'Nunito', sans-serif">Nunito</option>
+            </select>
+          </div>
+          <div class="control-group full">
+            <label>Table Spacing</label>
+            <input type="range" id="tableSpacing" min="50" max="200" value="100" step="5">
+            <div class="range-val" id="tableSpacingVal">100%</div>
+          </div>
+          <div class="control-group full">
+            <label>SEBI Registration</label>
+            <input type="text" id="sebiReg" value="INH000013776">
+          </div>
+          <div class="control-group full">
+            <label>Disclaimer</label>
+            <textarea id="disclaimer" rows="2" style="font-family:'Segoe UI',sans-serif;font-size:11px;">Investment in securities market are subject to market risks. Read all the related documents carefully before investing. The securities quoted are for illustration only and are not recommendatory. The information provided is intended for educational purposes only, for further disclosures, visit https://univest.in / Univest App.</textarea>
+          </div>
         </div>
+
         <div class="control-group full">
-          <label>Overall Scale (%)</label>
-          <input type="range" id="overallScale" min="50" max="150" value="100" step="5">
-          <div class="range-val" id="overallScaleVal">100%</div>
+          <label>File Name</label>
+          <input type="text" id="fileName" placeholder="profit-report" style="width:100%;padding:6px 10px;background:#1a1d2e;color:#e2e8f0;border:1px solid #2a2d3a;border-radius:6px;font-size:13px;">
         </div>
-        <div class="control-group full">
-          <label>Font Family</label>
-          <select id="fontFamily">
-            <option value="'Inter', sans-serif" selected>Inter (Default)</option>
-            <option value="'Segoe UI', system-ui, sans-serif">Segoe UI</option>
-            <option value="'Arial', sans-serif">Arial</option>
-            <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
-            <option value="'Roboto', sans-serif">Roboto</option>
-            <option value="'Poppins', sans-serif">Poppins</option>
-            <option value="'Open Sans', sans-serif">Open Sans</option>
-            <option value="'Lato', sans-serif">Lato</option>
-            <option value="'Montserrat', sans-serif">Montserrat</option>
-            <option value="'Nunito', sans-serif">Nunito</option>
-          </select>
-        </div>
-        <div class="control-group full">
-          <label>Table Spacing</label>
-          <input type="range" id="tableSpacing" min="50" max="200" value="100" step="5">
-          <div class="range-val" id="tableSpacingVal">100%</div>
-        </div>
-        <div class="control-group full">
-          <label>SEBI Registration</label>
-          <input type="text" id="sebiReg" value="INH000013776">
-        </div>
-        <div class="control-group full">
-          <label>Disclaimer</label>
-          <textarea id="disclaimer" rows="2" style="font-family:'Segoe UI',sans-serif;font-size:11px;">Investment in securities market are subject to market risks. Read all the related documents carefully before investing. The securities quoted are for illustration only and are not recommendatory. The information provided is intended for educational purposes only, for further disclosures, visit https://univest.in / Univest App.</textarea>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="generate()">Generate</button>
+          <button class="btn btn-download" onclick="download()">Download JPEG</button>
         </div>
       </div>
+    </div>
 
-      <div class="actions">
-        <button class="btn btn-primary" onclick="generate()">Generate</button>
-        <button class="btn btn-download" onclick="download()">Download PNG</button>
+    <!-- ═══════════ TAB 2: IPO AD CREATOR ═══════════ -->
+    <div class="tab-content" id="tab-ipo">
+      <div class="panel-header">
+        <h1>IPO Ad Creator</h1>
+        <p>1200 x 628 — fully automated ad generation</p>
+      </div>
+      <div class="panel-body">
+
+        <div class="controls" style="margin-top:0;">
+          <!-- API Key -->
+          <div class="control-group full">
+            <label>Anthropic API Key</label>
+            <input type="password" id="ipoApiKey" placeholder="sk-ant-api03-..." style="width:100%;background:#1e2130;border:1px solid #2e3148;border-radius:6px;color:#e0e0e0;font-size:12px;padding:7px 9px;outline:none;">
+            <div style="font-size:10px;color:#555;margin-top:3px;">Get yours at console.anthropic.com/settings/keys — saved in browser</div>
+          </div>
+
+          <!-- Company Name -->
+          <div class="control-group full">
+            <label>Company Name</label>
+            <input type="text" id="ipoCompanyName" value="Central Mine Planning & Design Institute" placeholder="e.g. Tata Motors">
+          </div>
+
+          <!-- Company Description -->
+          <div class="control-group full">
+            <label>Company Description</label>
+            <textarea id="ipoCompanyDesc" rows="2" style="font-family:'Segoe UI',sans-serif;font-size:11px;" placeholder="What does this company do? Used to find relevant background.">India's largest coal mining consultancy providing mine planning and design services.</textarea>
+          </div>
+
+          <!-- Title suffix -->
+          <div class="control-group full">
+            <label>Title Suffix</label>
+            <input type="text" id="ipoTitleSuffix" value="IPO" placeholder="e.g. IPO, OFS, FPO">
+          </div>
+
+          <!-- Overlay darkness -->
+          <div class="control-group full">
+            <label>Background Overlay Darkness</label>
+            <input type="range" id="ipoOverlay" min="0" max="80" value="30">
+            <div class="range-val" id="ipoOverlayVal">30%</div>
+          </div>
+
+          <!-- Person options -->
+          <div class="control-group full">
+            <label style="display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" id="ipoForceNewPerson" style="width:auto;accent-color:#4aeabc;">
+              Generate NEW person (otherwise reuses cached)
+            </label>
+            <div id="ipoPersonCount" style="font-size:10px;color:#555;margin-top:3px;">Checking...</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="ipoGenerateBtn" onclick="generateIPOAuto()">Generate Ad</button>
+          <button class="btn btn-download" id="ipoDownloadBtn" onclick="downloadIPO()" disabled>Download PNG</button>
+        </div>
+
+        <!-- Progress Steps -->
+        <div id="ipoProgress" style="margin-top:14px;display:none;">
+          <div class="ipo-step" id="step-logo">
+            <span class="step-icon">&#9711;</span> Fetching company logo...
+          </div>
+          <div class="ipo-step" id="step-bg">
+            <span class="step-icon">&#9711;</span> Finding relevant background...
+          </div>
+          <div class="ipo-step" id="step-person">
+            <span class="step-icon">&#9711;</span> Preparing person image...
+          </div>
+          <div class="ipo-step" id="step-compose">
+            <span class="step-icon">&#9711;</span> Compositing final ad...
+          </div>
+        </div>
+        <div class="status-msg" id="ipoStatus"></div>
       </div>
     </div>
   </div>
 
+  <!-- ═══════════ PREVIEW AREA ═══════════ -->
   <div class="preview-area">
-    <div class="card" id="card">
-      <div class="card-inner" id="cardInner">
-        <div class="card-sebi" id="sebiLine"></div>
-        <div class="card-title" id="titleBlock"></div>
-        <div id="tablesContainer"></div>
-        <div class="card-disclaimer" id="disclaimerDisplay"></div>
+    <!-- Profit Report Preview -->
+    <div id="preview-profit">
+      <div class="card" id="card">
+        <div class="card-inner" id="cardInner">
+          <div class="card-sebi" id="sebiLine"></div>
+          <div class="card-title" id="titleBlock"></div>
+          <div id="tablesContainer"></div>
+          <div class="card-disclaimer" id="disclaimerDisplay"></div>
+        </div>
       </div>
+    </div>
+
+    <!-- IPO Ad Preview -->
+    <div id="preview-ipo" style="display:none;">
+      <div class="ipo-placeholder" id="ipoPlaceholder">
+        Enter company details and click <strong>Generate Ad</strong>
+      </div>
+      <img id="ipoPreviewImg" style="display:none;" alt="Generated IPO Ad">
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+
+/* ═══════════════════════════════════════════
+   TAB SWITCHING
+   ═══════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', (tab === 'profit' && i === 0) || (tab === 'ipo' && i === 1));
+  });
+  document.getElementById('tab-profit').classList.toggle('active', tab === 'profit');
+  document.getElementById('tab-ipo').classList.toggle('active', tab === 'ipo');
+  document.getElementById('preview-profit').style.display = tab === 'profit' ? '' : 'none';
+  document.getElementById('preview-ipo').style.display = tab === 'ipo' ? '' : 'none';
+
+  if (tab === 'ipo') checkPersonCache();
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1: PROFIT REPORT (unchanged logic)
+   ═══════════════════════════════════════════ */
 function parseInput(text) {
   const sections = [];
   let cur = null;
@@ -199,13 +361,10 @@ function parseInput(text) {
     const m = line.match(/^(.+?):\s*(.+?)\s+(?:in\s+|on\s+)(.+)$/i);
     if (m) {
       let ret = m[2].trim();
-      // Strip any existing ₹ or % to normalize
       const bare = ret.replace(/[₹%,]/g, '').trim();
       if (/futures|commodity/i.test(cur.name)) {
-        // Always show ₹ for Futures/Commodity
         if (!ret.startsWith('₹')) ret = '₹' + ret;
       } else {
-        // Always show % for Equity/Options
         if (!ret.includes('%')) ret = ret + '%';
       }
       cur.rows.push({ name: m[1].trim(), returns: ret, duration: m[3].trim() });
@@ -221,29 +380,6 @@ const COL_HEADERS = {
   'COMMODITY': ['STOCK NAME', 'RETURNS',          'DURATION'],
 };
 
-/*
-  Proportional sizing based on the template:
-  Template = 600px wide, ~750px tall, 12 trades, 3 sections.
-  All sizes expressed as % of card width (W).
-    - Card padding:      4% W (top/bottom), 5% W (left/right)
-    - SEBI font:         1.9% W
-    - Title font:        8% W
-    - Title margin-bot:  3% W
-    - Section label font:2% W
-    - Section gap-top:   2.3% W
-    - Section gap-bot:   1% W
-    - Table header font: 1.9% W
-    - Table header pad:  1.3% W
-    - Data font:         2.2% W
-    - Data row pad:      1.2% W
-    - Disclaimer font:   1.3% W
-    - Disclaimer margin: 2.5% W
-
-  For N trades and S sections, target card height =
-    padding + sebi + title + S*(label+header) + N*row + disclaimer
-  If height > W*1.25, scale everything down proportionally.
-*/
-
 function generate() {
   const text     = document.getElementById('inputText').value;
   const sections = parseInput(text);
@@ -257,46 +393,30 @@ function generate() {
   const totalRows = sections.reduce((s, sec) => s + sec.rows.length, 0);
   const S         = sections.length;
 
-  // Base sizes as fraction of W (tuned from template at 600px / 12 trades / 3 sections)
   const BASE = {
-    padTB:      0.040,  // top & bottom padding
-    padLR:      0.050,  // left & right padding
-    sebiFz:     0.019,  // SEBI font
-    sebiMb:     0.010,  // SEBI margin bottom
-    titleFz:    0.080,  // title font
-    titleMb:    0.030,  // title margin bottom
-    secFz:      0.021,  // section label font
-    secMt:      0.025,  // section gap top
-    secMb:      0.010,  // section gap bottom
-    thFz:       0.019,  // table header font
-    thPad:      0.014,  // table header padding
-    tdFz:       0.022,  // data cell font
-    tdPad:      0.012,  // data cell padding
-    discFz:     0.013,  // disclaimer font
-    discMt:     0.028,  // disclaimer margin top
+    padTB: 0.040, padLR: 0.050, sebiFz: 0.019, sebiMb: 0.010,
+    titleFz: 0.080, titleMb: 0.030, secFz: 0.021, secMt: 0.025,
+    secMb: 0.010, thFz: 0.019, thPad: 0.014, tdFz: 0.022,
+    tdPad: 0.012, discFz: 0.013, discMt: 0.028,
   };
 
-  // Calculate the "natural" height if we used these base proportions
   const px = (frac) => frac * W;
   const naturalH =
-    px(BASE.padTB) * 2 +                                          // top + bottom padding
-    px(BASE.sebiFz) + px(BASE.sebiMb) +                           // SEBI line
-    px(BASE.titleFz) * 1.1 + px(BASE.titleMb) +                   // title
-    S * (px(BASE.secFz) + px(BASE.secMt) + px(BASE.secMb) +       // section labels
-         px(BASE.thFz) + px(BASE.thPad) * 2) +                    // table headers
-    totalRows * (px(BASE.tdFz) + px(BASE.tdPad) * 2) +            // data rows
-    px(BASE.discFz) * 3 + px(BASE.discMt);                        // disclaimer (~3 lines)
+    px(BASE.padTB) * 2 +
+    px(BASE.sebiFz) + px(BASE.sebiMb) +
+    px(BASE.titleFz) * 1.1 + px(BASE.titleMb) +
+    S * (px(BASE.secFz) + px(BASE.secMt) + px(BASE.secMb) +
+         px(BASE.thFz) + px(BASE.thPad) * 2) +
+    totalRows * (px(BASE.tdFz) + px(BASE.tdPad) * 2) +
+    px(BASE.discFz) * 3 + px(BASE.discMt);
 
-  // Target max height = W * 1.25 (from template aspect ratio ~4:5)
   const maxH = W * 1.25;
   const autoScale = naturalH > maxH ? maxH / naturalH : 1;
   const scale = autoScale * userScale;
 
-  // Compute final pixel sizes
   const sz = {};
   for (const k in BASE) sz[k] = Math.max(1, Math.round(px(BASE[k]) * scale));
 
-  // Apply to card
   const card = document.getElementById('card');
   card.style.width = W + 'px';
   card.style.fontFamily = fontFam;
@@ -304,26 +424,22 @@ function generate() {
   const inner = document.getElementById('cardInner');
   inner.style.padding = sz.padTB + 'px ' + sz.padLR + 'px';
 
-  // SEBI
   const sebiEl = document.getElementById('sebiLine');
   sebiEl.textContent = 'SEBI Reg. : ' + sebi;
   sebiEl.style.fontSize = sz.sebiFz + 'px';
   sebiEl.style.marginBottom = sz.sebiMb + 'px';
 
-  // Title
   const titleBlock = document.getElementById('titleBlock');
   titleBlock.style.marginBottom = sz.titleMb + 'px';
   titleBlock.innerHTML =
     '<span class="t-green" style="font-size:' + sz.titleFz + 'px">' + totalRows + ' Profits </span>' +
     '<span class="t-white" style="font-size:' + sz.titleFz + 'px">Booked Today</span>';
 
-  // Disclaimer
   const discEl = document.getElementById('disclaimerDisplay');
   discEl.textContent = disc;
   discEl.style.fontSize = sz.discFz + 'px';
   discEl.style.marginTop = sz.discMt + 'px';
 
-  // Tables
   const container = document.getElementById('tablesContainer');
   container.innerHTML = '';
 
@@ -331,7 +447,6 @@ function generate() {
   sections.sort((a, b) => (ORDER[a.name] ?? 99) - (ORDER[b.name] ?? 99));
 
   for (const sec of sections) {
-    // Section label
     const label = document.createElement('div');
     label.className = 'card-section';
     label.style.fontSize = sz.secFz + 'px';
@@ -340,7 +455,6 @@ function generate() {
     label.textContent = sec.name;
     container.appendChild(label);
 
-    // Table
     const headers = COL_HEADERS[sec.name] || COL_HEADERS['EQUITY'];
     const table = document.createElement('table');
     table.className = 'card-table';
@@ -389,32 +503,181 @@ function download() {
     scale: 2, backgroundColor: null, useCORS: true
   }).then(canvas => {
     const a = document.createElement('a');
-    a.download = 'profit-report.jpg';
+    const customName = document.getElementById('fileName').value.trim() || 'profit-report';
+    a.download = customName + '.jpg';
     a.href = canvas.toDataURL('image/jpeg', 0.95);
     a.click();
   });
 }
 
-// Live updates
-document.getElementById('cardWidth').addEventListener('input', function () {
-  document.getElementById('cardWidthVal').textContent = this.value + 'px';
-  generate();
-});
-document.getElementById('overallScale').addEventListener('input', function () {
-  document.getElementById('overallScaleVal').textContent = this.value + '%';
-  generate();
-});
-document.getElementById('tableSpacing').addEventListener('input', function () {
-  document.getElementById('tableSpacingVal').textContent = this.value + '%';
-  generate();
-});
-['fontFamily','sebiReg'].forEach(id => {
-  document.getElementById(id).addEventListener('change', generate);
-});
-document.getElementById('inputText').addEventListener('input', generate);
-document.getElementById('disclaimer').addEventListener('input', generate);
+/* ═══════════════════════════════════════════
+   TAB 2: IPO AD CREATOR — Backend Automated
+   ═══════════════════════════════════════════ */
 
-window.addEventListener('DOMContentLoaded', generate);
+let ipoGeneratedBlob = null; // Stores the last generated image
+
+function checkPersonCache() {
+  fetch('/api/persons')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('ipoPersonCount').textContent =
+        data.count + ' person image(s) cached. ' + (data.count === 0 ? 'First run will generate one via Claude.' : 'Will reuse unless checkbox is ticked.');
+    })
+    .catch(() => {
+      document.getElementById('ipoPersonCount').textContent = 'Server not running. Start with: node server.js';
+    });
+}
+
+function setStep(stepId, state, text) {
+  const el = document.getElementById(stepId);
+  if (!el) return;
+  el.className = 'ipo-step ' + state;
+  if (text) el.innerHTML = '<span class="step-icon">' +
+    (state === 'done' ? '&#10003;' : state === 'error' ? '&#10007;' : state === 'active' ? '&#9679;' : '&#9711;') +
+    '</span> ' + text;
+}
+
+async function generateIPOAuto() {
+  const companyName = document.getElementById('ipoCompanyName').value.trim();
+  const description = document.getElementById('ipoCompanyDesc').value.trim();
+  const suffix = document.getElementById('ipoTitleSuffix').value.trim();
+  const overlayAlpha = parseInt(document.getElementById('ipoOverlay').value) / 100;
+  const apiKey = document.getElementById('ipoApiKey').value.trim();
+  const forceNewPerson = document.getElementById('ipoForceNewPerson').checked;
+
+  if (!companyName) {
+    document.getElementById('ipoStatus').textContent = 'Enter a company name';
+    document.getElementById('ipoStatus').className = 'status-msg error';
+    return;
+  }
+  if (!apiKey) {
+    document.getElementById('ipoStatus').textContent = 'Enter your Anthropic API key';
+    document.getElementById('ipoStatus').className = 'status-msg error';
+    return;
+  }
+  localStorage.setItem('ipo_api_key', apiKey);
+
+  // Show progress
+  const progress = document.getElementById('ipoProgress');
+  progress.style.display = 'block';
+  const btn = document.getElementById('ipoGenerateBtn');
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+
+  setStep('step-logo', 'active', 'Fetching company logo...');
+  setStep('step-bg', '', 'Finding relevant background...');
+  setStep('step-person', '', 'Preparing person image...');
+  setStep('step-compose', '', 'Compositing final ad...');
+
+  document.getElementById('ipoStatus').textContent = '';
+  document.getElementById('ipoStatus').className = 'status-msg';
+
+  // Simulate step progression via SSE-like approach
+  // (Backend does it all at once, but we show steps for UX)
+  setTimeout(() => setStep('step-logo', 'active', 'Fetching company logo...'), 0);
+  setTimeout(() => {
+    setStep('step-logo', 'done', 'Company logo fetched');
+    setStep('step-bg', 'active', 'Finding relevant background...');
+  }, 3000);
+  setTimeout(() => {
+    setStep('step-bg', 'done', 'Background found');
+    setStep('step-person', 'active', 'Preparing person image...');
+  }, 6000);
+  setTimeout(() => {
+    setStep('step-person', 'done', 'Person ready');
+    setStep('step-compose', 'active', 'Compositing final ad...');
+  }, 9000);
+
+  try {
+    const res = await fetch('/api/generate-ad', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ companyName, description, suffix, overlayAlpha, apiKey, forceNewPerson }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Server error ' + res.status }));
+      throw new Error(err.error || 'Generation failed');
+    }
+
+    const blob = await res.blob();
+    ipoGeneratedBlob = blob;
+
+    // Show image
+    const url = URL.createObjectURL(blob);
+    const img = document.getElementById('ipoPreviewImg');
+    img.src = url;
+    img.style.display = 'block';
+    document.getElementById('ipoPlaceholder').style.display = 'none';
+
+    // All steps done
+    setStep('step-logo', 'done', 'Company logo fetched');
+    setStep('step-bg', 'done', 'Background found');
+    setStep('step-person', 'done', 'Person ready');
+    setStep('step-compose', 'done', 'Ad composed!');
+
+    document.getElementById('ipoStatus').textContent = 'Ad generated successfully!';
+    document.getElementById('ipoStatus').className = 'status-msg success';
+    document.getElementById('ipoDownloadBtn').disabled = false;
+
+    // Refresh person cache count
+    checkPersonCache();
+
+  } catch (err) {
+    setStep('step-compose', 'error', 'Error: ' + err.message);
+    document.getElementById('ipoStatus').textContent = err.message;
+    document.getElementById('ipoStatus').className = 'status-msg error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate Ad';
+  }
+}
+
+function downloadIPO() {
+  if (!ipoGeneratedBlob) return;
+  const a = document.createElement('a');
+  const companyName = document.getElementById('ipoCompanyName').value.trim() || 'ipo-ad';
+  const safeName = companyName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  a.download = safeName + '-ipo-ad.png';
+  a.href = URL.createObjectURL(ipoGeneratedBlob);
+  a.click();
+}
+
+/* ═══════════════════════════════════════════
+   INIT & EVENT LISTENERS
+   ═══════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', function () {
+  // Tab 1 listeners
+  document.getElementById('cardWidth').addEventListener('input', function () {
+    document.getElementById('cardWidthVal').textContent = this.value + 'px';
+    generate();
+  });
+  document.getElementById('overallScale').addEventListener('input', function () {
+    document.getElementById('overallScaleVal').textContent = this.value + '%';
+    generate();
+  });
+  document.getElementById('tableSpacing').addEventListener('input', function () {
+    document.getElementById('tableSpacingVal').textContent = this.value + '%';
+    generate();
+  });
+  ['fontFamily','sebiReg'].forEach(id => {
+    document.getElementById(id).addEventListener('change', generate);
+  });
+  document.getElementById('inputText').addEventListener('input', generate);
+  document.getElementById('disclaimer').addEventListener('input', generate);
+
+  // Tab 2: Overlay slider live update
+  document.getElementById('ipoOverlay').addEventListener('input', function () {
+    document.getElementById('ipoOverlayVal').textContent = this.value + '%';
+  });
+
+  // Tab 2: Restore saved API key
+  const savedKey = localStorage.getItem('ipo_api_key');
+  if (savedKey) document.getElementById('ipoApiKey').value = savedKey;
+
+  // Init Tab 1
+  generate();
+});
 </script>
 </body>
 </html>
